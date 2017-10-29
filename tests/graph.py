@@ -1,6 +1,6 @@
 from proboscis import test
 from hamcrest import assert_that, is_, is_not, equal_to, has_length, same_instance, raises, calling
-from src.graph import Graph, Vertex, Edge
+from src.graph import Graph, Vertex, Edge, DirectedEdge
 
 
 @test(groups=["graph"],
@@ -16,6 +16,8 @@ class GraphTest(object):
         va, vb = graph.vertices["A"], graph.vertices["B"]
         assert_that(va.id, is_(equal_to("A")))
         assert_that(vb.id, is_(equal_to("B")))
+        assert_that(va.graph, is_(same_instance(graph)))
+        assert_that(vb.graph, is_(same_instance(graph)))
 
     @test
     def graph_connections_sanity(self):
@@ -23,7 +25,7 @@ class GraphTest(object):
             vids=["A", "B", "C"],
             edges={
                 Edge("A", "B"),
-                Edge("A", "C", directed=True)
+                DirectedEdge("A", "C")
             }
         )
         va, vb, vc = graph.vertices["A"], graph.vertices["B"], graph.vertices["C"]
@@ -92,18 +94,23 @@ class EdgeTest(object):
     """
     @test
     def edge_creation_sanity(self):
-        src_id, dst_id = "A", "B"
-        directed = True
         weight = 42
-        edge = Edge(src_id, dst_id, directed=directed, weight=weight)
+        edge = Edge("A", "B", weight=weight)
+        assert_that(edge.src_id, is_(equal_to("A")))
+        assert_that(edge.dst_id, is_(equal_to("B")))
+        assert_that(edge.directed, is_(equal_to(False)))
+        assert_that(edge.weight, is_(equal_to(weight)))
 
-        assert_that(edge.src_id, is_(equal_to(src_id)))
-        assert_that(edge.dst_id, is_(equal_to(dst_id)))
-        assert_that(edge.directed, is_(equal_to(directed)))
+    @test
+    def directed_edge_creation_sanity(self):
+        weight = 42
+        edge = DirectedEdge("A", "B", weight=weight)
+        assert_that(edge.src_id, is_(equal_to("A")))
+        assert_that(edge.dst_id, is_(equal_to("B")))
+        assert_that(edge.directed, is_(equal_to(True)))
         assert_that(edge.weight, is_(equal_to(weight)))
 
     @test
     def same_src_and_dst_ids(self):
-        src_id = "A"
-        assert_that(calling(Edge).with_args(src_id, src_id),
+        assert_that(calling(Edge).with_args("A", "A"),
                     raises(ValueError))

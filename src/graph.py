@@ -16,7 +16,6 @@ class Graph(object):
 
     def add_vertex(self, vid):
         self.vertices[vid] = Vertex(id=vid, graph=self)
-        # self.vertices[vid] = Vertex(id=vid)
 
     def remove_vertex(self, vid):
         del self.vertices[vid]
@@ -53,7 +52,7 @@ class Vertex(object):
     def __init__(self, id, graph=None):
         self.id = id
         self.graph = graph
-        self.conns = {}
+        self.edges = {}
 
     def __str__(self):
         return "<Vertex(id='%s')>" % self.id
@@ -61,45 +60,57 @@ class Vertex(object):
     def connect_to(self, vertex, weight=None):
         if self.is_connected_to(vertex):
             raise ValueError("%s is already connected to %s" % (self, vertex))
-        self.conns[vertex.id] = Connection(src=self, dst=vertex, weight=weight)
+        self.edges[vertex.id] = DirectedEdge(
+            src_id=self.id,
+            dst_id=vertex.id,
+            weight=weight
+        )
 
     def disconnect_from(self, vertex):
         if not self.is_connected_to(vertex):
             raise ValueError("%s is not connected to %s" % (self, vertex))
-        del self.conns[vertex.id]
+        del self.edges[vertex.id]
 
     def is_connected_to(self, vertex):
-        return vertex.id in self.conns
+        return vertex.id in self.edges
+
+    def neighbors(self):
+        return (self.graph.vertices[vid] for vid in self.edges)
 
 
-class Edge(object):
+class EdgeBase(object):
     """
-    Represents graph's edge
+    Serves as a base for edges classes to inherit from
     """
-    def __init__(self, src_id, dst_id, directed=False, weight=None):
+    def __init__(self, src_id, dst_id, weight=None):
         if src_id == dst_id:
             raise ValueError("srd_id and dst_id must differ")
         self.src_id = src_id
         self.dst_id = dst_id
-        self.directed = directed
         self.weight = weight
 
     def __str__(self):
-        return "<Edge(from='%s', to='%s', directed=%s, weight=%s)>" % (
-            self.src_id, self.dst_id, self.directed, self.weight
+        return "<%s(from='%s', to='%s', weight=%s)>" % (
+            self.__class__.__name__,
+            self.src_id,
+            self.dst_id,
+            self.weight
         )
 
 
-class Connection(object):
+class Edge(EdgeBase):
     """
-    Represents directed connection between graph's vertices
+    Represents graph's bidirectional edge
     """
-    def __init__(self, src, dst, weight):
-        self.src = src
-        self.dst = dst
-        self.weight = weight
+    def __init__(self, *args, **kwargs):
+        super(Edge, self).__init__(*args, **kwargs)
+        self.directed = False
 
-    def __str__(self):
-        return "<Connection(src=%s, dst=%s, weight=%s)>" % (
-            self.src, self.dst, self.weight
-        )
+
+class DirectedEdge(EdgeBase):
+    """
+    Represents graph's directed edge
+    """
+    def __init__(self, *args, **kwargs):
+        super(DirectedEdge, self).__init__(*args, **kwargs)
+        self.directed = True
