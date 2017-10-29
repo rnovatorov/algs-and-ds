@@ -1,9 +1,10 @@
-from proboscis import test, before_class
-from hamcrest import assert_that, is_, is_not, equal_to, has_length, same_instance
+from proboscis import test
+from hamcrest import assert_that, is_, is_not, equal_to, has_length, same_instance, raises, calling
 from src.graph import Graph, Vertex, Edge
 
 
-@test
+@test(groups=["graph"],
+      depends_on_groups=["graph-edge", "graph-vertex"])
 class GraphTest(object):
     """
     Tests that Graph data structure functions properly
@@ -13,7 +14,7 @@ class GraphTest(object):
         va_id = "A"
         vb_id = "B"
         vids = [va_id, vb_id]
-        edges = {Edge(va_id, vb_id, bidir=False)}
+        edges = {Edge(va_id, vb_id, directed=True)}
         graph = Graph(vids, edges)
 
         assert_that(graph.vertices, has_length(len(vids)))
@@ -52,49 +53,95 @@ class GraphTest(object):
 
     @test
     def depth_first_search(self):
-        vids = ["A", "B", "C", "D"]
+        vids = ["Z", "A", "S", "X", "D", "C", "F", "V"]
+        edges = {
+            Edge("Z", "A", directed=True),
+            Edge("A", "S"),
+            Edge("S", "X"),
+            Edge("X", "D"),
+            Edge("X", "C"),
+            Edge("D", "C"),
+            Edge("C", "F"),
+            Edge("C", "V"),
+            Edge("F", "V")
+        }
+        graph = Graph(vids, edges)
+
+        # src = graph.vertices["S"]
+        # not_s_vids = [vid for vid in vids if vid != "S"]
+        # dsts = [graph.vertices[vid] for vid in not_s_vids]
+
+        src = graph.vertices["S"]
+        dst = graph.vertices["Z"]
+
+        assert_that(src.has_path_to(dst, algorithm="dfs"), is_(True))
+
+        # for dst in dsts:
+        #     assert_that(src.has_path_to(dst, algorithm="dfs"), is_(True))
 
     @test
     def breadth_first_search(self):
         pass
 
 
-@test
+@test(groups=["graph", "graph-vertex"],
+      depends_on_groups=["graph-edge"])
 class VertexTest(object):
     """
     Tests Graph's component Vertex
     """
     @test
-    def labeling(self):
-        test_id = "T"
-        v = Vertex(id=test_id, graph=Graph())
-        assert_that(v.id, is_(equal_to(test_id)))
+    def connect_to_new_vertex(self):
+        va, vb = Vertex("A"), Vertex("B")
+        assert_that(va.is_connected_to(vb), is_(False))
+        va.connect_to(vb)
+        assert_that(va.is_connected_to(vb), is_(True))
 
     @test
-    def connection(self):
-        graph = Graph()
-        va, vb = Vertex("A", graph=graph), Vertex("B", graph=graph)
-        assert_that(va.is_adjacent_to(vb), is_(False))
-
+    def connect_to_already_connected_vertex(self):
+        va, vb = Vertex("A"), Vertex("B")
+        assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
-        assert_that(va.is_adjacent_to(vb), is_(True))
+        assert_that(va.is_connected_to(vb), is_(True))
+        assert_that(calling(va.connect_to).with_args(vb),
+                    raises(ValueError))
 
     @test
-    def disconnection(self):
-        graph = Graph()
-        va, vb = Vertex("A", graph=graph), Vertex("B", graph=graph)
-        assert_that(va.is_adjacent_to(vb), is_(False))
-
+    def disconnect_connected_vertex(self):
+        va, vb = Vertex("A"), Vertex("B")
+        assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
-        assert_that(va.is_adjacent_to(vb), is_(True))
-
+        assert_that(va.is_connected_to(vb), is_(True))
         va.disconnect_from(vb)
-        assert_that(va.is_adjacent_to(vb), is_(False))
+        assert_that(va.is_connected_to(vb), is_(False))
+
+    @test
+    def disconnect_absent_vertex(self):
+        va, vb = Vertex("A"), Vertex("B")
+        assert_that(va.is_connected_to(vb), is_(False))
+        assert_that(calling(va.disconnect_from).with_args(vb),
+                    raises(ValueError))
 
 
-@test
+@test(groups=["graph", "graph-edge"])
 class EdgeTest(object):
     """
     Tests Graph's component Edge
     """
-    pass
+    @test
+    def valid_edge(self):
+        src_id, dst_id = "A", "B"
+        directed = True
+        weight = 42
+        edge = Edge(src_id, dst_id, directed=directed, weight=weight)
+
+        assert_that(edge.src_id, is_(equal_to(src_id)))
+        assert_that(edge.dst_id, is_(equal_to(dst_id)))
+        assert_that(edge.directed, is_(equal_to(directed)))
+        assert_that(edge.weight, is_(equal_to(weight)))
+
+    @test
+    def same_src_and_dst_ids(self):
+        src_id = "A"
+        assert_that(calling(Edge).with_args(src_id, src_id),
+                    raises(ValueError))

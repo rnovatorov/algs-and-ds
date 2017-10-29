@@ -2,9 +2,12 @@ from proboscis import TestProgram
 
 
 def main():
-    from tests.graph import GraphTest
+    from tests import graph
 
-    TestProgram().run_and_exit()
+    TestProgram(groups=[
+        "graph-edge",
+        "graph-vertex"
+    ]).run_and_exit()
 
 
 if __name__ == "__main__":
