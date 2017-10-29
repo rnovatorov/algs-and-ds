@@ -6,7 +6,8 @@ def main():
 
     TestProgram(groups=[
         "graph-edge",
-        "graph-vertex"
+        "graph-vertex",
+        "graph"
     ]).run_and_exit()
 
 
