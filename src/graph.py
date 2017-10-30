@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class Graph(object):
     """
     Represents graph data structure
@@ -52,7 +55,20 @@ class Graph(object):
         return False
 
     def breadth_first_search(self, src, dst):
-        raise NotImplementedError
+        queue = deque([src])
+        visited = set()
+
+        while queue:
+            cur_vertex = queue.popleft()
+            if cur_vertex is dst:
+                return True
+            for vid in cur_vertex.edges:
+                neighbor = self.vertices[vid]
+                if neighbor not in visited:
+                    queue.append(neighbor)
+            visited.add(cur_vertex)
+
+        return False
 
     def dijkstra(self, src, dst):
         raise NotImplementedError
