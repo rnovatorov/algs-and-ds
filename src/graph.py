@@ -92,13 +92,13 @@ class Vertex(object):
         if not self.is_connected_to(vertex):
             self.edges[vertex.id] = weight
         else:
-            raise exceptions.VertexConnectionError(self, vertex)
+            raise exceptions.VertexAlreadyConnectedError(self, vertex)
 
     def disconnect_from(self, vertex):
         if self.is_connected_to(vertex):
             del self.edges[vertex.id]
         else:
-            raise exceptions.VertexDisconnectionError(self, vertex)
+            raise exceptions.VertexNotConnectedError(self, vertex)
 
     def is_connected_to(self, vertex):
         return vertex.id in self.edges

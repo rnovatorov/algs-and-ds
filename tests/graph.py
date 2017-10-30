@@ -297,7 +297,7 @@ class VertexTest(object):
         va.connect_to(vb)
         assert_that(va.is_connected_to(vb), is_(True))
         assert_that(calling(va.connect_to).with_args(vb),
-                    raises(exceptions.VertexConnectionError))
+                    raises(exceptions.VertexAlreadyConnectedError))
 
     @test
     def disconnect_connected_vertex(self):
@@ -313,7 +313,7 @@ class VertexTest(object):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         assert_that(calling(va.disconnect_from).with_args(vb),
-                    raises(exceptions.VertexDisconnectionError))
+                    raises(exceptions.VertexNotConnectedError))
 
 
 @test(groups=["graph-edge"])
