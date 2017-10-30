@@ -1,4 +1,5 @@
 from collections import deque
+from . import exceptions
 
 
 class Graph(object):
@@ -21,6 +22,8 @@ class Graph(object):
         return [self.vertices[vid] for vid in vids]
 
     def add_vertex(self, vertex):
+        if vertex.id in self.vertices:
+            raise exceptions.VertexAlreadyExists(vertex)
         self.vertices[vertex.id] = vertex
 
     def remove_vertex(self, vertex):
@@ -86,14 +89,16 @@ class Vertex(object):
         return "<Vertex(id='%s')>" % self.id
 
     def connect_to(self, vertex, weight=None):
-        if self.is_connected_to(vertex):
-            raise ValueError("%s is already connected to %s" % (self, vertex))
-        self.edges[vertex.id] = weight
+        if not self.is_connected_to(vertex):
+            self.edges[vertex.id] = weight
+        else:
+            raise exceptions.VertexConnectionError(self, vertex)
 
     def disconnect_from(self, vertex):
-        if not self.is_connected_to(vertex):
-            raise ValueError("%s is not connected to %s" % (self, vertex))
-        del self.edges[vertex.id]
+        if self.is_connected_to(vertex):
+            del self.edges[vertex.id]
+        else:
+            raise exceptions.VertexDisconnectionError(self, vertex)
 
     def is_connected_to(self, vertex):
         return vertex.id in self.edges
@@ -104,8 +109,6 @@ class Edge(object):
     Represents graph's edge
     """
     def __init__(self, src_id, dst_id, directed=False, weight=None):
-        if src_id == dst_id:
-            raise ValueError("src_id and dst_id must differ")
         self.src_id = src_id
         self.dst_id = dst_id
         self.directed = directed
