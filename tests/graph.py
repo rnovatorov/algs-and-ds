@@ -1,6 +1,6 @@
 from proboscis import test
 from hamcrest import assert_that, is_, is_not, equal_to, has_length, same_instance, raises, calling
-from src.graph import Graph, Vertex, Edge, DirectedEdge
+from src.graph import Graph, Vertex, Edge
 
 
 @test(groups=["graph"],
@@ -16,8 +16,6 @@ class GraphTest(object):
         va, vb = graph.vertices["A"], graph.vertices["B"]
         assert_that(va.id, is_(equal_to("A")))
         assert_that(vb.id, is_(equal_to("B")))
-        assert_that(va.graph, is_(same_instance(graph)))
-        assert_that(vb.graph, is_(same_instance(graph)))
 
     @test
     def graph_connections_sanity(self):
@@ -25,7 +23,7 @@ class GraphTest(object):
             vids=["A", "B", "C"],
             edges={
                 Edge("A", "B"),
-                DirectedEdge("A", "C")
+                Edge("A", "C", directed=True)
             }
         )
         va, vb, vc = graph.vertices["A"], graph.vertices["B"], graph.vertices["C"]
@@ -48,7 +46,7 @@ class GraphTest(object):
         pass
 
 
-@test(groups=["graph", "graph-vertex"],
+@test(groups=["graph-vertex"],
       depends_on_groups=["graph-edge"])
 class VertexTest(object):
     """
@@ -87,7 +85,7 @@ class VertexTest(object):
                     raises(ValueError))
 
 
-@test(groups=["graph", "graph-edge"])
+@test(groups=["graph-edge"])
 class EdgeTest(object):
     """
     Tests Graph's component Edge
@@ -104,7 +102,7 @@ class EdgeTest(object):
     @test
     def directed_edge_creation_sanity(self):
         weight = 42
-        edge = DirectedEdge("A", "B", weight=weight)
+        edge = Edge("A", "B", directed=True, weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))
         assert_that(edge.dst_id, is_(equal_to("B")))
         assert_that(edge.directed, is_(equal_to(True)))
