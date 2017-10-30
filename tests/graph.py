@@ -124,7 +124,7 @@ class GraphTest(object):
         """
         Graph:
                          .---(D)<--.
-                         V         |
+                         v         |
             (A)<--(B)-->(C)       (F)-->(G)
                          |         ^
                          '-->(E)---'
@@ -225,7 +225,7 @@ class GraphTest(object):
         """
         Graph:
                          .---(D)<--.
-                         V         |
+                         v         |
             (A)<--(B)-->(C)       (F)-->(G)
                          |         ^
                          '-->(E)---'
