@@ -1,5 +1,6 @@
 from proboscis import test
 from hamcrest import assert_that, is_, equal_to, has_length, raises, calling
+from src import exceptions
 from src.graph import Graph, Vertex, Edge
 
 
@@ -41,6 +42,26 @@ class GraphTest(object):
         assert_that(vc.is_connected_to(va), is_(False))
         assert_that(vc.is_connected_to(vb), is_(False))
         assert_that(vc.is_connected_to(vc), is_(False))
+
+    @test
+    def add_vertex_with_existing_id(self):
+        graph = Graph(["A"])
+        assert_that(calling(graph.add_vertex).with_args(Vertex("A")),
+                    raises(exceptions.VertexAlreadyExists))
+
+    @test
+    def remove_existing_vertex(self):
+        graph = Graph(["A"])
+        assert_that("A" in graph.vertices, is_(True))
+        graph.remove_vertex(Vertex("A"))
+        assert_that("A" in graph.vertices, is_(False))
+
+    @test
+    def remove_existing_edge(self):
+        graph = Graph(["A", "B"], {Edge("A", "B")})
+        assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(True))
+        graph.remove_edge(Edge("A", "B"))
+        assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(False))
 
     @test(groups=["dfs"])
     def dfs_in_empty_graph(self):
@@ -264,7 +285,7 @@ class VertexTest(object):
         va.connect_to(vb)
         assert_that(va.is_connected_to(vb), is_(True))
         assert_that(calling(va.connect_to).with_args(vb),
-                    raises(ValueError))
+                    raises(exceptions.VertexConnectionError))
 
     @test
     def disconnect_connected_vertex(self):
@@ -280,7 +301,7 @@ class VertexTest(object):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         assert_that(calling(va.disconnect_from).with_args(vb),
-                    raises(ValueError))
+                    raises(exceptions.VertexDisconnectionError))
 
 
 @test(groups=["graph-edge"])
@@ -305,8 +326,3 @@ class EdgeTest(object):
         assert_that(edge.dst_id, is_(equal_to("B")))
         assert_that(edge.directed, is_(equal_to(True)))
         assert_that(edge.weight, is_(equal_to(weight)))
-
-    @test
-    def same_src_and_dst_ids(self):
-        assert_that(calling(Edge).with_args("A", "A"),
-                    raises(ValueError))
