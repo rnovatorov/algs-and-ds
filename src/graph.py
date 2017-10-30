@@ -6,7 +6,7 @@ class Graph(object):
         self.vertices = {}
         if vids:
             for vid in vids:
-                self.add_vertex(vid)
+                self.add_vertex(Vertex(id=vid))
         if edges:
             for edge in edges:
                 self.add_edge(edge)
@@ -14,11 +14,11 @@ class Graph(object):
     def __str__(self):
         return "<Graph(vertices=%s)>" % self.vertices
 
-    def add_vertex(self, vid):
-        self.vertices[vid] = Vertex(id=vid)
+    def add_vertex(self, vertex):
+        self.vertices[vertex.id] = vertex
 
-    def remove_vertex(self, vid):
-        del self.vertices[vid]
+    def remove_vertex(self, vertex):
+        del self.vertices[vertex.id]
 
     def add_edge(self, edge):
         src, dst = self.vertices[edge.src_id], self.vertices[edge.dst_id]
