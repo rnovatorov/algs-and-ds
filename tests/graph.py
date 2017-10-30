@@ -3,8 +3,7 @@ from hamcrest import assert_that, is_, is_not, equal_to, has_length, same_instan
 from src.graph import Graph, Vertex, Edge
 
 
-@test(groups=["graph"],
-      depends_on_groups=["graph-edge", "graph-vertex"])
+@test(groups=["graph"], depends_on_groups=["graph-edge", "graph-vertex"])
 class GraphTest(object):
     """
     Tests Graph data structure and its algorithms
@@ -46,8 +45,7 @@ class GraphTest(object):
         pass
 
 
-@test(groups=["graph-vertex"],
-      depends_on_groups=["graph-edge"])
+@test(groups=["graph-vertex"], depends_on_groups=["graph-edge"])
 class VertexTest(object):
     """
     Tests Graph's component Vertex
