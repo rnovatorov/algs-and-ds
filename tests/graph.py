@@ -10,6 +10,9 @@ class GraphTest(object):
     """
     @test
     def graph_creation_sanity(self):
+        """
+        (A)---(B)
+        """
         graph = Graph(["A", "B"], {Edge("A", "B")})
         assert_that(graph.vertices, has_length(2))
         va, vb = graph.vertices["A"], graph.vertices["B"]
@@ -18,14 +21,15 @@ class GraphTest(object):
 
     @test
     def graph_connections_sanity(self):
-        graph = Graph(
-            vids=["A", "B", "C"],
-            edges={
-                Edge("A", "B"),
-                Edge("A", "C", directed=True)
-            }
-        )
-        va, vb, vc = graph.vertices["A"], graph.vertices["B"], graph.vertices["C"]
+        """
+        (B)<->(A)-->(C)
+        """
+        vids = ["A", "B", "C"]
+        graph = Graph(vids=vids, edges={
+            Edge("A", "B"),
+            Edge("A", "C", directed=True)
+        })
+        va, vb, vc = graph.get_multiple_vertices(vids)
         assert_that(va.is_connected_to(va), is_(False))
         assert_that(va.is_connected_to(vb), is_(True))
         assert_that(va.is_connected_to(vc), is_(True))
@@ -37,8 +41,69 @@ class GraphTest(object):
         assert_that(vc.is_connected_to(vc), is_(False))
 
     @test
-    def depth_first_search(self):
-        pass
+    def depth_first_search_with_no_cycles(self):
+        """
+        (B)<->(A)-->(C)
+        """
+        vids = ["A", "B", "C"]
+        graph = Graph(vids=vids, edges={
+            Edge("A", "B"),
+            Edge("A", "C", directed=True)
+        })
+        va, vb, vc = graph.get_multiple_vertices(vids)
+        assert_that(graph.depth_first_search(va, va), is_(True))
+        assert_that(graph.depth_first_search(va, vb), is_(True))
+        assert_that(graph.depth_first_search(va, vc), is_(True))
+        assert_that(graph.depth_first_search(vb, va), is_(True))
+        assert_that(graph.depth_first_search(vb, vb), is_(True))
+        assert_that(graph.depth_first_search(vb, vc), is_(True))
+        assert_that(graph.depth_first_search(vc, va), is_(False))
+        assert_that(graph.depth_first_search(vc, vb), is_(False))
+        assert_that(graph.depth_first_search(vc, vc), is_(True))
+
+    @test
+    def depth_first_search_with_bidirectional_cycle(self):
+        """
+                     .---(D)---.
+                     |         |
+        (A)---(B)---(C)       (F)---(G)
+                     |         |
+                     '---(E)---'
+        """
+        vids = ["A", "B", "C", "D", "E", "F", "G"]
+        graph = Graph(vids=vids, edges={
+            Edge("B", "A"),
+            Edge("B", "C"),
+            Edge("C", "D"),
+            Edge("C", "E"),
+            Edge("D", "F"),
+            Edge("E", "F"),
+            Edge("F", "G"),
+        })
+        vb, vg = graph.get_multiple_vertices(["B", "G"])
+        assert_that(graph.depth_first_search(vb, vg), is_(True))
+
+    @test
+    def depth_first_search_with_directed_cycle(self):
+        """
+                     .---(D)<--.
+                     V         |
+        (A)<--(B)-->(C)       (F)-->(G)
+                     |         ^
+                     '-->(E)---'
+        """
+        vids = ["A", "B", "C", "D", "E", "F", "G"]
+        graph = Graph(vids=vids, edges={
+            Edge("B", "A", directed=True),
+            Edge("B", "C", directed=True),
+            Edge("C", "E", directed=True),
+            Edge("E", "F", directed=True),
+            Edge("F", "D", directed=True),
+            Edge("D", "C", directed=True),
+            Edge("F", "G", directed=True),
+        })
+        vb, vg = graph.get_multiple_vertices(["B", "G"])
+        assert_that(graph.depth_first_search(vb, vg), is_(True))
 
     @test
     def breadth_first_search(self):

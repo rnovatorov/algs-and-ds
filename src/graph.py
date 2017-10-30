@@ -14,6 +14,9 @@ class Graph(object):
     def __str__(self):
         return "<Graph(vertices=%s)>" % self.vertices
 
+    def get_multiple_vertices(self, vids):
+        return [self.vertices[vid] for vid in vids]
+
     def add_vertex(self, vertex):
         self.vertices[vertex.id] = vertex
 
@@ -21,19 +24,34 @@ class Graph(object):
         del self.vertices[vertex.id]
 
     def add_edge(self, edge):
-        src, dst = self.vertices[edge.src_id], self.vertices[edge.dst_id]
+        src, dst = self.get_multiple_vertices(edge.src_dst_pair)
         src.connect_to(dst, weight=edge.weight)
         if not edge.directed:
             dst.connect_to(src, weight=edge.weight)
 
     def remove_edge(self, edge):
-        src, dst = self.vertices[edge.src_id], self.vertices[edge.dst_id]
+        src, dst = self.get_multiple_vertices(edge.src_dst_pair)
         src.disconnect_from(dst)
         if not edge.directed:
             dst.disconnect_from(src)
 
-    def depth_first_search(self, src, dst):
-        raise NotImplementedError
+    def depth_first_search(self, src, dst, visited=None):
+        if visited is None:
+            visited = set()
+        if src is dst:
+            return True
+        else:
+            visited.add(src)
+        for vid in src.edges:
+            neighbor = self.vertices[vid]
+            if neighbor not in visited:
+                if neighbor.is_connected_to(dst):
+                    return True
+                else:
+                    result = self.depth_first_search(neighbor, dst, visited=visited)
+                    if result:
+                        return True
+        return False
 
     def breadth_first_search(self, src, dst):
         raise NotImplementedError
@@ -87,3 +105,7 @@ class Edge(object):
             self.directed,
             self.weight
         )
+
+    @property
+    def src_dst_pair(self):
+        return self.src_id, self.dst_id
