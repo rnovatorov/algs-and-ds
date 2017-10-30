@@ -1,5 +1,5 @@
 from proboscis import test
-from hamcrest import assert_that, is_, is_not, equal_to, has_length, same_instance, raises, calling
+from hamcrest import assert_that, is_, equal_to, has_length, raises, calling
 from src.graph import Graph, Vertex, Edge
 
 
@@ -11,7 +11,8 @@ class GraphTest(object):
     @test
     def graph_creation_sanity(self):
         """
-        (A)---(B)
+        Graph:
+            (A)---(B)
         """
         graph = Graph(["A", "B"], {Edge("A", "B")})
         assert_that(graph.vertices, has_length(2))
@@ -22,7 +23,8 @@ class GraphTest(object):
     @test
     def graph_connections_sanity(self):
         """
-        (B)<->(A)-->(C)
+        Graph:
+            (B)<->(A)-->(C)
         """
         vids = ["A", "B", "C"]
         graph = Graph(vids=vids, edges={
@@ -41,9 +43,37 @@ class GraphTest(object):
         assert_that(vc.is_connected_to(vc), is_(False))
 
     @test
-    def depth_first_search_with_no_cycles(self):
+    def dfs_in_empty_graph(self):
         """
-        (B)<->(A)-->(C)
+        Graph:
+            *empty*
+        """
+        graph = Graph()
+        va, vb = Vertex("A"), Vertex("B")
+        assert_that(graph.depth_first_search(va, vb), is_(False))
+        assert_that(graph.depth_first_search(vb, va), is_(False))
+
+    @test
+    def dfs_for_absent_node(self):
+        """
+        Graph:
+            (B)<->(A)-->(C)
+        """
+        vids = ["A", "B", "C"]
+        graph = Graph(vids=vids, edges={
+            Edge("A", "B"),
+            Edge("A", "C", directed=True)
+        })
+        va, vb, vc = graph.get_multiple_vertices(vids)
+        vx = Vertex("X")
+        assert_that(graph.depth_first_search(va, vx), is_(False))
+        assert_that(graph.depth_first_search(vx, va), is_(False))
+
+    @test
+    def dfs_with_no_cycles(self):
+        """
+        Graph:
+            (B)<->(A)-->(C)
         """
         vids = ["A", "B", "C"]
         graph = Graph(vids=vids, edges={
@@ -62,13 +92,14 @@ class GraphTest(object):
         assert_that(graph.depth_first_search(vc, vc), is_(True))
 
     @test
-    def depth_first_search_with_bidirectional_cycle(self):
+    def dfs_with_bidirectional_cycle(self):
         """
-                     .---(D)---.
-                     |         |
-        (A)---(B)---(C)       (F)---(G)
-                     |         |
-                     '---(E)---'
+        Graph:
+                         .---(D)---.
+                         |         |
+            (A)---(B)---(C)       (F)---(G)
+                         |         |
+                         '---(E)---'
         """
         vids = ["A", "B", "C", "D", "E", "F", "G"]
         graph = Graph(vids=vids, edges={
@@ -82,15 +113,17 @@ class GraphTest(object):
         })
         vb, vg = graph.get_multiple_vertices(["B", "G"])
         assert_that(graph.depth_first_search(vb, vg), is_(True))
+        assert_that(graph.depth_first_search(vg, vb), is_(True))
 
     @test
-    def depth_first_search_with_directed_cycle(self):
+    def dfs_with_directed_cycle(self):
         """
-                     .---(D)<--.
-                     V         |
-        (A)<--(B)-->(C)       (F)-->(G)
-                     |         ^
-                     '-->(E)---'
+        Graph:
+                         .---(D)<--.
+                         V         |
+            (A)<--(B)-->(C)       (F)-->(G)
+                         |         ^
+                         '-->(E)---'
         """
         vids = ["A", "B", "C", "D", "E", "F", "G"]
         graph = Graph(vids=vids, edges={
