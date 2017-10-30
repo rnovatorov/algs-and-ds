@@ -45,12 +45,20 @@ class GraphTest(object):
 
     @test
     def add_vertex_with_existing_id(self):
+        """
+        Graph:
+            (A)
+        """
         graph = Graph(["A"])
         assert_that(calling(graph.add_vertex).with_args(Vertex("A")),
                     raises(exceptions.VertexAlreadyExists))
 
     @test
     def remove_existing_vertex(self):
+        """
+        Graph:
+            (A)
+        """
         graph = Graph(["A"])
         assert_that("A" in graph.vertices, is_(True))
         graph.remove_vertex(Vertex("A"))
@@ -58,6 +66,10 @@ class GraphTest(object):
 
     @test
     def remove_existing_edge(self):
+        """
+        Graph:
+            (A)---(B)
+        """
         graph = Graph(["A", "B"], {Edge("A", "B")})
         assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(True))
         graph.remove_edge(Edge("A", "B"))
