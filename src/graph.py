@@ -36,23 +36,19 @@ class Graph(object):
             dst.disconnect_from(src)
 
     def depth_first_search(self, src, dst, visited=None):
-        # Checking if we found what we were looking for
         if src is dst:
             return True
 
-        # Keeping track of visited vertices
         if visited is None:
             visited = set()
         visited.add(src)
 
-        # Iterating through src neighbors
         for vid in src.edges:
             neighbor = self.vertices[vid]
             if neighbor not in visited:
                 if self.depth_first_search(neighbor, dst, visited=visited):
                     return True
 
-        # No more neighbors left
         return False
 
     def breadth_first_search(self, src, dst):
