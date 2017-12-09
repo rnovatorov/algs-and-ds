@@ -1,7 +1,7 @@
 from proboscis import test
 from hamcrest import assert_that, is_, equal_to, has_length, raises, calling
-from src import exceptions
 from src.graph import Graph, Vertex, Edge
+from src.exceptions import GraphError
 
 
 @test(groups=["graph"], depends_on_groups=["graph-edge", "graph-vertex"])
@@ -51,7 +51,7 @@ class TestGraph(object):
         """
         graph = Graph(["A"])
         assert_that(calling(graph.add_vertex).with_args(Vertex("A")),
-                    raises(exceptions.VertexAlreadyExists))
+                    raises(GraphError))
 
     @test
     def remove_existing_vertex(self):
@@ -297,7 +297,7 @@ class TestVertex(object):
         va.connect_to(vb)
         assert_that(va.is_connected_to(vb), is_(True))
         assert_that(calling(va.connect_to).with_args(vb),
-                    raises(exceptions.VertexAlreadyConnectedError))
+                    raises(GraphError))
 
     @test
     def disconnect_connected_vertex(self):
@@ -313,7 +313,7 @@ class TestVertex(object):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         assert_that(calling(va.disconnect_from).with_args(vb),
-                    raises(exceptions.VertexNotConnectedError))
+                    raises(GraphError))
 
 
 @test(groups=["graph-edge"])

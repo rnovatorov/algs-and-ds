@@ -1,5 +1,5 @@
 from collections import deque
-from . import exceptions
+from .exceptions import GraphError
 
 
 class Graph(object):
@@ -8,10 +8,10 @@ class Graph(object):
     """
     def __init__(self, vids=None, edges=None):
         self.vertices = {}
-        if vids:
+        if vids is not None:
             for vid in vids:
                 self.add_vertex(Vertex(id=vid))
-        if edges:
+        if edges is not None:
             for edge in edges:
                 self.add_edge(edge)
 
@@ -23,7 +23,7 @@ class Graph(object):
 
     def add_vertex(self, vertex):
         if vertex.id in self.vertices:
-            raise exceptions.VertexAlreadyExists(vertex)
+            raise GraphError("%s is already in %s" % (vertex, self))
         self.vertices[vertex.id] = vertex
 
     def remove_vertex(self, vertex):
@@ -87,13 +87,13 @@ class Vertex(object):
         if not self.is_connected_to(vertex):
             self.edges[vertex.id] = weight
         else:
-            raise exceptions.VertexAlreadyConnectedError(self, vertex)
+            raise GraphError("%s is already connected to %s" % (self, vertex))
 
     def disconnect_from(self, vertex):
         if self.is_connected_to(vertex):
             del self.edges[vertex.id]
         else:
-            raise exceptions.VertexNotConnectedError(self, vertex)
+            raise GraphError("%s is not connected to %s" % (self, vertex))
 
     def is_connected_to(self, vertex):
         return vertex.id in self.edges
