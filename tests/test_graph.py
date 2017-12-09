@@ -5,7 +5,7 @@ from src.graph import Graph, Vertex, Edge
 
 
 @test(groups=["graph"], depends_on_groups=["graph-edge", "graph-vertex"])
-class GraphTest(object):
+class TestGraph(object):
     """
     Tests Graph data structure and its algorithms
     """
@@ -279,7 +279,7 @@ class GraphTest(object):
 
 
 @test(groups=["graph-vertex"], depends_on_groups=["graph-edge"])
-class VertexTest(object):
+class TestVertex(object):
     """
     Tests Graph's component Vertex
     """
@@ -317,7 +317,7 @@ class VertexTest(object):
 
 
 @test(groups=["graph-edge"])
-class EdgeTest(object):
+class TestEdge(object):
     """
     Tests Graph's component Edge
     """

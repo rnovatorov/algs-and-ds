@@ -2,11 +2,14 @@ from proboscis import TestProgram
 
 
 def main():
-    from tests import graph
+    import tests
 
-    TestProgram(groups=[
-        "graph"
-    ]).run_and_exit()
+    TestProgram(
+        groups=[
+            "graph",
+            "sorting"
+        ]
+    ).run_and_exit()
 
 
 if __name__ == "__main__":
