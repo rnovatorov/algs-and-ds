@@ -1,4 +1,5 @@
 import random
+from heapq import heappush, heappop
 
 
 def quick_sort(array):
@@ -21,3 +22,10 @@ def quick_sort(array):
 
     # Conquer
     return quick_sort(left) + center + quick_sort(right)
+
+
+def heap_sort(array):
+    heap = []
+    for item in array:
+        heappush(heap, item)
+    return [heappop(heap) for _ in range(len(array))]
