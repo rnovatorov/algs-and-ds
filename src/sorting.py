@@ -33,9 +33,7 @@ def merge_sort(array):
     left, right = array[:mid], array[mid:]
 
     # Conquer
-    sorted_left = merge_sort(left)
-    sorted_right = merge_sort(right)
-    return _merge(sorted_left, sorted_right)
+    return _merge(merge_sort(left), merge_sort(right))
 
 
 # TODO: Find a way to avoid list.pop(0)... deque?
@@ -90,6 +88,7 @@ def bubble_sort(array):
             if array[i] > array[i + 1]:
                 array[i], array[i + 1] = array[i + 1], array[i]
                 swapped = True
+        # not swapped => sorted
         if not swapped:
             break
     return array
