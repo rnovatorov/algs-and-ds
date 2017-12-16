@@ -1,3 +1,6 @@
-proboscis==1.2.6.0
+attrs==17.3.0
+pluggy==0.6.0
+py==1.5.2
 PyHamcrest==1.9.0
+pytest==3.3.1
 six==1.11.0

@@ -1,34 +1,26 @@
-from proboscis import test
 from hamcrest import assert_that, is_, equal_to
 from src.sorting import insertion_sort, selection_sort, merge_sort, \
                         quick_sort, heap_sort, bubble_sort
 
 
-@test(groups=["sorting"])
 class TestSorting(object):
 
-    @test
-    def insertion_sort(self):
+    def test_insertion_sort(self):
         self.sort_all_arrays(insertion_sort)
 
-    @test
-    def selection_sort(self):
+    def test_selection_sort(self):
         self.sort_all_arrays(selection_sort)
 
-    @test
-    def merge_sort(self):
+    def test_merge_sort(self):
         self.sort_all_arrays(merge_sort)
 
-    @test
-    def quick_sort(self):
+    def test_quick_sort(self):
         self.sort_all_arrays(quick_sort)
 
-    @test
-    def heap_sort(self):
+    def test_heap_sort(self):
         self.sort_all_arrays(heap_sort)
 
-    @test
-    def bubble_sort(self):
+    def test_bubble_sort(self):
         self.sort_all_arrays(bubble_sort)
 
     def sort_all_arrays(self, sorting_algorithm):

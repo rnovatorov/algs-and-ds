@@ -1,16 +1,13 @@
-from proboscis import test
 from hamcrest import assert_that, is_, equal_to, has_length, raises, calling
 from src.graph import Graph, Vertex, Edge
 from src.exceptions import GraphError
 
 
-@test(groups=["graph"], depends_on_groups=["graph-edge", "graph-vertex"])
 class TestGraph(object):
     """
     Tests Graph data structure and its algorithms
     """
-    @test
-    def create_graph(self):
+    def test_create_graph(self):
         """
         Graph:
             (A)---(B)
@@ -21,8 +18,7 @@ class TestGraph(object):
         assert_that(va.id, is_(equal_to("A")))
         assert_that(vb.id, is_(equal_to("B")))
 
-    @test
-    def check_graph_connections(self):
+    def test_check_graph_connections(self):
         """
         Graph:
             (B)<->(A)-->(C)
@@ -43,8 +39,7 @@ class TestGraph(object):
         assert_that(vc.is_connected_to(vb), is_(False))
         assert_that(vc.is_connected_to(vc), is_(False))
 
-    @test
-    def add_vertex_with_existing_id(self):
+    def test_add_vertex_with_existing_id(self):
         """
         Graph:
             (A)
@@ -53,8 +48,7 @@ class TestGraph(object):
         assert_that(calling(graph.add_vertex).with_args(Vertex("A")),
                     raises(GraphError))
 
-    @test
-    def remove_existing_vertex(self):
+    def test_remove_existing_vertex(self):
         """
         Graph:
             (A)
@@ -64,8 +58,7 @@ class TestGraph(object):
         graph.remove_vertex(Vertex("A"))
         assert_that("A" in graph.vertices, is_(False))
 
-    @test
-    def remove_existing_edge(self):
+    def test_remove_existing_edge(self):
         """
         Graph:
             (A)---(B)
@@ -76,20 +69,17 @@ class TestGraph(object):
         assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(False))
 
 
-@test(groups=["graph-vertex"], depends_on_groups=["graph-edge"])
 class TestVertex(object):
     """
     Tests Graph's component Vertex
     """
-    @test
-    def connect_to_new_vertex(self):
+    def test_connect_to_new_vertex(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
         assert_that(va.is_connected_to(vb), is_(True))
 
-    @test
-    def connect_to_already_connected_vertex(self):
+    def test_connect_to_already_connected_vertex(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
@@ -97,8 +87,7 @@ class TestVertex(object):
         assert_that(calling(va.connect_to).with_args(vb),
                     raises(GraphError))
 
-    @test
-    def disconnect_connected_vertex(self):
+    def test_disconnect_connected_vertex(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
@@ -106,21 +95,18 @@ class TestVertex(object):
         va.disconnect_from(vb)
         assert_that(va.is_connected_to(vb), is_(False))
 
-    @test
-    def disconnect_absent_vertex(self):
+    def test_disconnect_absent_vertex(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         assert_that(calling(va.disconnect_from).with_args(vb),
                     raises(GraphError))
 
 
-@test(groups=["graph-edge"])
 class TestEdge(object):
     """
     Tests Graph's component Edge
     """
-    @test
-    def create_edge(self):
+    def test_create_edge(self):
         weight = 42
         edge = Edge("A", "B", weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))
@@ -128,8 +114,7 @@ class TestEdge(object):
         assert_that(edge.directed, is_(equal_to(False)))
         assert_that(edge.weight, is_(equal_to(weight)))
 
-    @test
-    def create_directed_edge(self):
+    def test_create_directed_edge(self):
         weight = 42
         edge = Edge("A", "B", directed=True, weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))

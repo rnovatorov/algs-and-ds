@@ -1,16 +1,13 @@
-from proboscis import test
 from hamcrest import assert_that, is_
 from src.graph import Graph, Vertex, Edge
 from src.dfs import depth_first_search
 
 
-@test(groups=["dfs"], depends_on_groups=["graph"])
 class TestDFS(object):
     """
     Tests for depth first search algorithm
     """
-    @test
-    def dfs_in_empty_graph(self):
+    def test_dfs_in_empty_graph(self):
         """
         Graph:
             *empty*
@@ -20,8 +17,7 @@ class TestDFS(object):
         assert_that(depth_first_search(graph, va, vb), is_(False))
         assert_that(depth_first_search(graph, vb, va), is_(False))
 
-    @test
-    def dfs_for_absent_node(self):
+    def test_dfs_for_absent_node(self):
         """
         Graph:
             (B)<->(A)-->(C)
@@ -36,8 +32,7 @@ class TestDFS(object):
         assert_that(depth_first_search(graph, va, vx), is_(False))
         assert_that(depth_first_search(graph, vx, va), is_(False))
 
-    @test
-    def dfs_in_acyclic_graph(self):
+    def test_dfs_in_acyclic_graph(self):
         """
         Graph:
             (B)<->(A)-->(C)
@@ -58,8 +53,7 @@ class TestDFS(object):
         assert_that(depth_first_search(graph, vc, vb), is_(False))
         assert_that(depth_first_search(graph, vc, vc), is_(True))
 
-    @test
-    def dfs_in_graph_with_bidirectional_cycle(self):
+    def test_dfs_in_graph_with_bidirectional_cycle(self):
         """
         Graph:
                          .---(D)---.
@@ -86,8 +80,7 @@ class TestDFS(object):
         assert_that(depth_first_search(graph, ve, vb), is_(True))
         assert_that(depth_first_search(graph, ve, vg), is_(True))
 
-    @test
-    def dfs_in_graph_with_directed_cycle(self):
+    def test_dfs_in_graph_with_directed_cycle(self):
         """
         Graph:
                          .---(D)<--.
