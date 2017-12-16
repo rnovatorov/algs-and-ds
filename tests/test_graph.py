@@ -7,7 +7,7 @@ class TestGraph(object):
     """
     Tests for Graph data structure
     """
-    def test_create_graph(self):
+    def test_create(self):
         """
         Graph:
             (A)---(B)
@@ -18,7 +18,7 @@ class TestGraph(object):
         assert_that(va.id, is_(equal_to("A")))
         assert_that(vb.id, is_(equal_to("B")))
 
-    def test_check_graph_connections(self):
+    def test_connections(self):
         """
         Graph:
             (B)<->(A)-->(C)
@@ -73,13 +73,13 @@ class TestVertex(object):
     """
     Tests Graph's component Vertex
     """
-    def test_connect_to_new_vertex(self):
+    def test_connect_to_new(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
         assert_that(va.is_connected_to(vb), is_(True))
 
-    def test_connect_to_already_connected_vertex(self):
+    def test_connect_to_already_connected(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
@@ -87,7 +87,7 @@ class TestVertex(object):
         assert_that(calling(va.connect_to).with_args(vb),
                     raises(GraphError))
 
-    def test_disconnect_connected_vertex(self):
+    def test_disconnect_connected(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         va.connect_to(vb)
@@ -95,7 +95,7 @@ class TestVertex(object):
         va.disconnect_from(vb)
         assert_that(va.is_connected_to(vb), is_(False))
 
-    def test_disconnect_absent_vertex(self):
+    def test_disconnect_absent(self):
         va, vb = Vertex("A"), Vertex("B")
         assert_that(va.is_connected_to(vb), is_(False))
         assert_that(calling(va.disconnect_from).with_args(vb),
@@ -106,7 +106,7 @@ class TestEdge(object):
     """
     Tests Graph's component Edge
     """
-    def test_create_edge(self):
+    def test_create(self):
         weight = 42
         edge = Edge("A", "B", weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))
@@ -114,7 +114,7 @@ class TestEdge(object):
         assert_that(edge.directed, is_(equal_to(False)))
         assert_that(edge.weight, is_(equal_to(weight)))
 
-    def test_create_directed_edge(self):
+    def test_create_directed(self):
         weight = 42
         edge = Edge("A", "B", directed=True, weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))

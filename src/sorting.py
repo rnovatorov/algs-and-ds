@@ -1,5 +1,5 @@
 import random
-from heapq import heappush, heappop
+from .heap import MinHeap
 
 
 def insertion_sort(array):
@@ -52,11 +52,10 @@ def _merge(left, right):
             merged.append(right.pop(0))
 
 
+# TODO: Add max_heap_sort as well
 def heap_sort(array):
-    heap = []
-    for item in array:
-        heappush(heap, item)
-    return [heappop(heap) for _ in range(len(array))]
+    h = MinHeap(array)
+    return [h.pop() for _ in range(len(array))]
 
 
 def quick_sort(array):
