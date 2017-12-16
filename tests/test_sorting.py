@@ -4,7 +4,9 @@ from src.sorting import insertion_sort, selection_sort, merge_sort, \
 
 
 class TestSorting(object):
-
+    """
+    Tests for sorting algorithms
+    """
     def test_insertion_sort(self):
         self.sort_all_arrays(insertion_sort)
 

@@ -5,7 +5,7 @@ from src.exceptions import GraphError
 
 class TestGraph(object):
     """
-    Tests Graph data structure and its algorithms
+    Tests for Graph data structure
     """
     def test_create_graph(self):
         """
