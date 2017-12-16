@@ -2,7 +2,6 @@
 Tests for depth first search algorithm
 """
 
-from hamcrest import assert_that, is_
 from src.graph import Graph, Vertex, Edge
 from src.dfs import depth_first_search
 
@@ -14,8 +13,8 @@ def test_empty_graph():
     """
     graph = Graph()
     va, vb = Vertex("A"), Vertex("B")
-    assert_that(depth_first_search(graph, va, vb), is_(False))
-    assert_that(depth_first_search(graph, vb, va), is_(False))
+    assert depth_first_search(graph, va, vb) is False
+    assert depth_first_search(graph, vb, va) is False
 
 
 def test_absent_node():
@@ -30,8 +29,8 @@ def test_absent_node():
     })
     va, vb, vc = graph.get_multiple_vertices(vids)
     vx = Vertex("X")
-    assert_that(depth_first_search(graph, va, vx), is_(False))
-    assert_that(depth_first_search(graph, vx, va), is_(False))
+    assert depth_first_search(graph, va, vx) is False
+    assert depth_first_search(graph, vx, va) is False
 
 
 def test_acyclic_graph():
@@ -45,15 +44,15 @@ def test_acyclic_graph():
         Edge("A", "C", directed=True)
     })
     va, vb, vc = graph.get_multiple_vertices(vids)
-    assert_that(depth_first_search(graph, va, va), is_(True))
-    assert_that(depth_first_search(graph, va, vb), is_(True))
-    assert_that(depth_first_search(graph, va, vc), is_(True))
-    assert_that(depth_first_search(graph, vb, va), is_(True))
-    assert_that(depth_first_search(graph, vb, vb), is_(True))
-    assert_that(depth_first_search(graph, vb, vc), is_(True))
-    assert_that(depth_first_search(graph, vc, va), is_(False))
-    assert_that(depth_first_search(graph, vc, vb), is_(False))
-    assert_that(depth_first_search(graph, vc, vc), is_(True))
+    assert depth_first_search(graph, va, va)
+    assert depth_first_search(graph, va, vb)
+    assert depth_first_search(graph, va, vc)
+    assert depth_first_search(graph, vb, va)
+    assert depth_first_search(graph, vb, vb)
+    assert depth_first_search(graph, vb, vc)
+    assert depth_first_search(graph, vc, va) is False
+    assert depth_first_search(graph, vc, vb) is False
+    assert depth_first_search(graph, vc, vc)
 
 
 def test_cyclic_graph():
@@ -76,8 +75,8 @@ def test_cyclic_graph():
         Edge("F", "G", directed=True),
     })
     vb, vg = graph.get_multiple_vertices(["B", "G"])
-    assert_that(depth_first_search(graph, vb, vg), is_(True))
-    assert_that(depth_first_search(graph, vg, vb), is_(False))
+    assert depth_first_search(graph, vb, vg)
+    assert depth_first_search(graph, vg, vb) is False
 
 
 def test_bidirectionally_cyclic_graph():
@@ -100,9 +99,9 @@ def test_bidirectionally_cyclic_graph():
         Edge("F", "G"),
     })
     vb, vd, ve, vg = graph.get_multiple_vertices(["B", "D", "E", "G"])
-    assert_that(depth_first_search(graph, vb, vg), is_(True))
-    assert_that(depth_first_search(graph, vg, vb), is_(True))
-    assert_that(depth_first_search(graph, vd, ve), is_(True))
-    assert_that(depth_first_search(graph, ve, vd), is_(True))
-    assert_that(depth_first_search(graph, ve, vb), is_(True))
-    assert_that(depth_first_search(graph, ve, vg), is_(True))
+    assert depth_first_search(graph, vb, vg)
+    assert depth_first_search(graph, vg, vb)
+    assert depth_first_search(graph, vd, ve)
+    assert depth_first_search(graph, ve, vd)
+    assert depth_first_search(graph, ve, vb)
+    assert depth_first_search(graph, ve, vg)

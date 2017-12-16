@@ -1,4 +1,4 @@
-from hamcrest import assert_that, is_, equal_to, has_length, raises, calling
+from pytest import raises
 from src.graph import Graph, Vertex, Edge
 from src.exceptions import GraphError
 
@@ -13,10 +13,9 @@ class TestGraph(object):
             (A)---(B)
         """
         graph = Graph(["A", "B"], {Edge("A", "B")})
-        assert_that(graph.vertices, has_length(2))
+        assert len(graph.vertices) == 2
         va, vb = graph.vertices["A"], graph.vertices["B"]
-        assert_that(va.id, is_(equal_to("A")))
-        assert_that(vb.id, is_(equal_to("B")))
+        assert (va.id, vb.id) == ("A", "B")
 
     def test_connections(self):
         """
@@ -29,15 +28,15 @@ class TestGraph(object):
             Edge("A", "C", directed=True)
         })
         va, vb, vc = graph.get_multiple_vertices(vids)
-        assert_that(va.is_connected_to(va), is_(False))
-        assert_that(va.is_connected_to(vb), is_(True))
-        assert_that(va.is_connected_to(vc), is_(True))
-        assert_that(vb.is_connected_to(va), is_(True))
-        assert_that(vb.is_connected_to(vb), is_(False))
-        assert_that(vb.is_connected_to(vc), is_(False))
-        assert_that(vc.is_connected_to(va), is_(False))
-        assert_that(vc.is_connected_to(vb), is_(False))
-        assert_that(vc.is_connected_to(vc), is_(False))
+        assert va.is_connected_to(va) is False
+        assert va.is_connected_to(vb)
+        assert va.is_connected_to(vc)
+        assert vb.is_connected_to(va)
+        assert vb.is_connected_to(vb) is False
+        assert vb.is_connected_to(vc) is False
+        assert vc.is_connected_to(va) is False
+        assert vc.is_connected_to(vb) is False
+        assert vc.is_connected_to(vc) is False
 
     def test_add_vertex_with_existing_id(self):
         """
@@ -45,8 +44,8 @@ class TestGraph(object):
             (A)
         """
         graph = Graph(["A"])
-        assert_that(calling(graph.add_vertex).with_args(Vertex("A")),
-                    raises(GraphError))
+        with raises(GraphError):
+            graph.add_vertex(Vertex("A"))
 
     def test_remove_existing_vertex(self):
         """
@@ -54,9 +53,9 @@ class TestGraph(object):
             (A)
         """
         graph = Graph(["A"])
-        assert_that("A" in graph.vertices, is_(True))
+        assert "A" in graph.vertices
         graph.remove_vertex(Vertex("A"))
-        assert_that("A" in graph.vertices, is_(False))
+        assert "A" not in graph.vertices
 
     def test_remove_existing_edge(self):
         """
@@ -64,9 +63,9 @@ class TestGraph(object):
             (A)---(B)
         """
         graph = Graph(["A", "B"], {Edge("A", "B")})
-        assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(True))
+        assert graph.vertices["A"].is_connected_to(graph.vertices["B"])
         graph.remove_edge(Edge("A", "B"))
-        assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(False))
+        assert graph.vertices["A"].is_connected_to(graph.vertices["B"]) is False
 
 
 class TestVertex(object):
@@ -75,31 +74,31 @@ class TestVertex(object):
     """
     def test_connect_to_new(self):
         va, vb = Vertex("A"), Vertex("B")
-        assert_that(va.is_connected_to(vb), is_(False))
+        assert va.is_connected_to(vb) is False
         va.connect_to(vb)
-        assert_that(va.is_connected_to(vb), is_(True))
+        assert va.is_connected_to(vb)
 
     def test_connect_to_already_connected(self):
         va, vb = Vertex("A"), Vertex("B")
-        assert_that(va.is_connected_to(vb), is_(False))
+        assert va.is_connected_to(vb) is False
         va.connect_to(vb)
-        assert_that(va.is_connected_to(vb), is_(True))
-        assert_that(calling(va.connect_to).with_args(vb),
-                    raises(GraphError))
+        assert va.is_connected_to(vb)
+        with raises(GraphError):
+            va.connect_to(vb)
 
     def test_disconnect_connected(self):
         va, vb = Vertex("A"), Vertex("B")
-        assert_that(va.is_connected_to(vb), is_(False))
+        assert va.is_connected_to(vb) is False
         va.connect_to(vb)
-        assert_that(va.is_connected_to(vb), is_(True))
+        assert va.is_connected_to(vb)
         va.disconnect_from(vb)
-        assert_that(va.is_connected_to(vb), is_(False))
+        assert va.is_connected_to(vb) is False
 
     def test_disconnect_absent(self):
         va, vb = Vertex("A"), Vertex("B")
-        assert_that(va.is_connected_to(vb), is_(False))
-        assert_that(calling(va.disconnect_from).with_args(vb),
-                    raises(GraphError))
+        assert va.is_connected_to(vb) is False
+        with raises(GraphError):
+            va.disconnect_from(vb)
 
 
 class TestEdge(object):
@@ -109,15 +108,15 @@ class TestEdge(object):
     def test_create(self):
         weight = 42
         edge = Edge("A", "B", weight=weight)
-        assert_that(edge.src_id, is_(equal_to("A")))
-        assert_that(edge.dst_id, is_(equal_to("B")))
-        assert_that(edge.directed, is_(equal_to(False)))
-        assert_that(edge.weight, is_(equal_to(weight)))
+        assert edge.src_id == "A"
+        assert edge.dst_id == "B"
+        assert edge.directed is False
+        assert edge.weight == weight
 
     def test_create_directed(self):
         weight = 42
         edge = Edge("A", "B", directed=True, weight=weight)
-        assert_that(edge.src_id, is_(equal_to("A")))
-        assert_that(edge.dst_id, is_(equal_to("B")))
-        assert_that(edge.directed, is_(equal_to(True)))
-        assert_that(edge.weight, is_(equal_to(weight)))
+        assert edge.src_id == "A"
+        assert edge.dst_id == "B"
+        assert edge.directed is True
+        assert edge.weight == weight

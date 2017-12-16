@@ -2,7 +2,6 @@
 Tests for sorting algorithms
 """
 
-from hamcrest import assert_that, is_, equal_to
 from src.sorting import insertion_sort, selection_sort, merge_sort, \
                         quick_sort, heap_sort, bubble_sort
 
@@ -43,31 +42,19 @@ def sort_all_arrays(sorting_algorithm):
 
 def sort_empty_array(sorting_algorithm):
     empty_array = []
-    assert_that(
-        sorting_algorithm(empty_array),
-        is_(equal_to(empty_array))
-    )
+    assert sorting_algorithm(empty_array) == empty_array
 
 
 def sort_unsorted_array(sorting_algorithm):
     unsorted_array = [0, 4, -8, 15, -16, 23, -42, -42]
-    assert_that(
-        sorting_algorithm(unsorted_array),
-        is_(equal_to(sorted(unsorted_array)))
-    )
+    assert sorting_algorithm(unsorted_array) == sorted(unsorted_array)
 
 
 def sort_sorted_array(sorting_algorithm):
     sorted_array = [0, 4, 8, 15, 16, 23, 42, 42]
-    assert_that(
-        sorting_algorithm(sorted_array),
-        is_(equal_to(sorted_array))
-    )
+    assert sorting_algorithm(sorted_array) == sorted_array
 
 
 def sort_array_of_same_elements(sorting_algorithm):
     array_of_same_elements = [42] * 8
-    assert_that(
-        sorting_algorithm(array_of_same_elements),
-        is_(equal_to(array_of_same_elements))
-    )
+    assert sorting_algorithm(array_of_same_elements) == array_of_same_elements
