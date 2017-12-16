@@ -5,10 +5,10 @@ def main():
     import tests
 
     TestProgram(
-        groups=[
-            "graph",
-            "sorting"
-        ]
+        # groups=[
+        #     "graph",
+        #     "sorting"
+        # ]
     ).run_and_exit()
 
 

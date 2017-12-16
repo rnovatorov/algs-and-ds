@@ -1,4 +1,3 @@
-from collections import deque
 from .exceptions import GraphError
 
 
@@ -40,36 +39,6 @@ class Graph(object):
         src.disconnect_from(dst)
         if not edge.directed:
             dst.disconnect_from(src)
-
-    def depth_first_search(self, src, dst, visited=None):
-        if src is dst:
-            return True
-        if visited is None:
-            visited = set()
-        visited.add(src)
-        for vid in src.edges:
-            neighbor = self.vertices[vid]
-            if neighbor not in visited:
-                if self.depth_first_search(neighbor, dst, visited=visited):
-                    return True
-        return False
-
-    def breadth_first_search(self, src, dst):
-        queue = deque([src])
-        visited = set()
-        while queue:
-            cur_vertex = queue.popleft()
-            if cur_vertex is dst:
-                return True
-            for vid in cur_vertex.edges:
-                neighbor = self.vertices[vid]
-                if neighbor not in visited:
-                    queue.append(neighbor)
-            visited.add(cur_vertex)
-        return False
-
-    def dijkstra(self, src, dst):
-        raise NotImplementedError
 
 
 class Vertex(object):

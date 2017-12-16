@@ -10,7 +10,7 @@ class TestGraph(object):
     Tests Graph data structure and its algorithms
     """
     @test
-    def graph_creation_sanity(self):
+    def create_graph(self):
         """
         Graph:
             (A)---(B)
@@ -22,7 +22,7 @@ class TestGraph(object):
         assert_that(vb.id, is_(equal_to("B")))
 
     @test
-    def graph_connections_sanity(self):
+    def check_graph_connections(self):
         """
         Graph:
             (B)<->(A)-->(C)
@@ -75,208 +75,6 @@ class TestGraph(object):
         graph.remove_edge(Edge("A", "B"))
         assert_that(graph.vertices["A"].is_connected_to(graph.vertices["B"]), is_(False))
 
-    @test(groups=["dfs"])
-    def dfs_in_empty_graph(self):
-        """
-        Graph:
-            *empty*
-        """
-        graph = Graph()
-        va, vb = Vertex("A"), Vertex("B")
-        assert_that(graph.depth_first_search(va, vb), is_(False))
-        assert_that(graph.depth_first_search(vb, va), is_(False))
-
-    @test(groups=["dfs"])
-    def dfs_for_absent_node(self):
-        """
-        Graph:
-            (B)<->(A)-->(C)
-        """
-        vids = ["A", "B", "C"]
-        graph = Graph(vids=vids, edges={
-            Edge("A", "B"),
-            Edge("A", "C", directed=True)
-        })
-        va, vb, vc = graph.get_multiple_vertices(vids)
-        vx = Vertex("X")
-        assert_that(graph.depth_first_search(va, vx), is_(False))
-        assert_that(graph.depth_first_search(vx, va), is_(False))
-
-    @test(groups=["dfs"])
-    def dfs_with_no_cycles(self):
-        """
-        Graph:
-            (B)<->(A)-->(C)
-        """
-        vids = ["A", "B", "C"]
-        graph = Graph(vids=vids, edges={
-            Edge("A", "B"),
-            Edge("A", "C", directed=True)
-        })
-        va, vb, vc = graph.get_multiple_vertices(vids)
-        assert_that(graph.depth_first_search(va, va), is_(True))
-        assert_that(graph.depth_first_search(va, vb), is_(True))
-        assert_that(graph.depth_first_search(va, vc), is_(True))
-        assert_that(graph.depth_first_search(vb, va), is_(True))
-        assert_that(graph.depth_first_search(vb, vb), is_(True))
-        assert_that(graph.depth_first_search(vb, vc), is_(True))
-        assert_that(graph.depth_first_search(vc, va), is_(False))
-        assert_that(graph.depth_first_search(vc, vb), is_(False))
-        assert_that(graph.depth_first_search(vc, vc), is_(True))
-
-    @test(groups=["dfs"])
-    def dfs_with_bidirectional_cycle(self):
-        """
-        Graph:
-                         .---(D)---.
-                         |         |
-            (A)---(B)---(C)       (F)---(G)
-                         |         |
-                         '---(E)---'
-        """
-        vids = ["A", "B", "C", "D", "E", "F", "G"]
-        graph = Graph(vids=vids, edges={
-            Edge("B", "A"),
-            Edge("B", "C"),
-            Edge("C", "D"),
-            Edge("C", "E"),
-            Edge("D", "F"),
-            Edge("E", "F"),
-            Edge("F", "G"),
-        })
-        vb, vd, ve, vg = graph.get_multiple_vertices(["B", "D", "E", "G"])
-        assert_that(graph.depth_first_search(vb, vg), is_(True))
-        assert_that(graph.depth_first_search(vg, vb), is_(True))
-        assert_that(graph.depth_first_search(vd, ve), is_(True))
-        assert_that(graph.depth_first_search(ve, vd), is_(True))
-        assert_that(graph.depth_first_search(ve, vb), is_(True))
-        assert_that(graph.depth_first_search(ve, vg), is_(True))
-
-    @test(groups=["dfs"])
-    def dfs_with_directed_cycle(self):
-        """
-        Graph:
-                         .---(D)<--.
-                         v         |
-            (A)<--(B)-->(C)       (F)-->(G)
-                         |         ^
-                         '-->(E)---'
-        """
-        vids = ["A", "B", "C", "D", "E", "F", "G"]
-        graph = Graph(vids=vids, edges={
-            Edge("B", "A", directed=True),
-            Edge("B", "C", directed=True),
-            Edge("C", "E", directed=True),
-            Edge("E", "F", directed=True),
-            Edge("F", "D", directed=True),
-            Edge("D", "C", directed=True),
-            Edge("F", "G", directed=True),
-        })
-        vb, vg = graph.get_multiple_vertices(["B", "G"])
-        assert_that(graph.depth_first_search(vb, vg), is_(True))
-        assert_that(graph.depth_first_search(vg, vb), is_(False))
-
-    @test(groups=["bfs"])
-    def bfs_in_empty_graph(self):
-        """
-        Graph:
-            *empty*
-        """
-        graph = Graph()
-        va, vb = Vertex("A"), Vertex("B")
-        assert_that(graph.breadth_first_search(va, vb), is_(False))
-        assert_that(graph.breadth_first_search(vb, va), is_(False))
-
-    @test(groups=["bfs"])
-    def bfs_for_absent_node(self):
-        """
-        Graph:
-            (B)<->(A)-->(C)
-        """
-        vids = ["A", "B", "C"]
-        graph = Graph(vids=vids, edges={
-            Edge("A", "B"),
-            Edge("A", "C", directed=True)
-        })
-        va, vb, vc = graph.get_multiple_vertices(vids)
-        vx = Vertex("X")
-        assert_that(graph.breadth_first_search(va, vx), is_(False))
-        assert_that(graph.breadth_first_search(vx, va), is_(False))
-
-    @test(groups=["bfs"])
-    def bfs_with_no_cycles(self):
-        """
-        Graph:
-            (B)<->(A)-->(C)
-        """
-        vids = ["A", "B", "C"]
-        graph = Graph(vids=vids, edges={
-            Edge("A", "B"),
-            Edge("A", "C", directed=True)
-        })
-        va, vb, vc = graph.get_multiple_vertices(vids)
-        assert_that(graph.breadth_first_search(va, va), is_(True))
-        assert_that(graph.breadth_first_search(va, vb), is_(True))
-        assert_that(graph.breadth_first_search(va, vc), is_(True))
-        assert_that(graph.breadth_first_search(vb, va), is_(True))
-        assert_that(graph.breadth_first_search(vb, vb), is_(True))
-        assert_that(graph.breadth_first_search(vb, vc), is_(True))
-        assert_that(graph.breadth_first_search(vc, va), is_(False))
-        assert_that(graph.breadth_first_search(vc, vb), is_(False))
-        assert_that(graph.breadth_first_search(vc, vc), is_(True))
-
-    @test(groups=["bfs"])
-    def bfs_with_bidirectional_cycle(self):
-        """
-        Graph:
-                         .---(D)---.
-                         |         |
-            (A)---(B)---(C)       (F)---(G)
-                         |         |
-                         '---(E)---'
-        """
-        vids = ["A", "B", "C", "D", "E", "F", "G"]
-        graph = Graph(vids=vids, edges={
-            Edge("B", "A"),
-            Edge("B", "C"),
-            Edge("C", "D"),
-            Edge("C", "E"),
-            Edge("D", "F"),
-            Edge("E", "F"),
-            Edge("F", "G"),
-        })
-        vb, vd, ve, vg = graph.get_multiple_vertices(["B", "D", "E", "G"])
-        assert_that(graph.breadth_first_search(vb, vg), is_(True))
-        assert_that(graph.breadth_first_search(vg, vb), is_(True))
-        assert_that(graph.breadth_first_search(vd, ve), is_(True))
-        assert_that(graph.breadth_first_search(ve, vd), is_(True))
-        assert_that(graph.breadth_first_search(ve, vb), is_(True))
-        assert_that(graph.breadth_first_search(ve, vg), is_(True))
-
-    @test(groups=["bfs"])
-    def bfs_with_directed_cycle(self):
-        """
-        Graph:
-                         .---(D)<--.
-                         v         |
-            (A)<--(B)-->(C)       (F)-->(G)
-                         |         ^
-                         '-->(E)---'
-        """
-        vids = ["A", "B", "C", "D", "E", "F", "G"]
-        graph = Graph(vids=vids, edges={
-            Edge("B", "A", directed=True),
-            Edge("B", "C", directed=True),
-            Edge("C", "E", directed=True),
-            Edge("E", "F", directed=True),
-            Edge("F", "D", directed=True),
-            Edge("D", "C", directed=True),
-            Edge("F", "G", directed=True),
-        })
-        vb, vg = graph.get_multiple_vertices(["B", "G"])
-        assert_that(graph.breadth_first_search(vb, vg), is_(True))
-        assert_that(graph.breadth_first_search(vg, vb), is_(False))
-
 
 @test(groups=["graph-vertex"], depends_on_groups=["graph-edge"])
 class TestVertex(object):
@@ -322,7 +120,7 @@ class TestEdge(object):
     Tests Graph's component Edge
     """
     @test
-    def edge_creation_sanity(self):
+    def create_edge(self):
         weight = 42
         edge = Edge("A", "B", weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))
@@ -331,7 +129,7 @@ class TestEdge(object):
         assert_that(edge.weight, is_(equal_to(weight)))
 
     @test
-    def directed_edge_creation_sanity(self):
+    def create_directed_edge(self):
         weight = 42
         edge = Edge("A", "B", directed=True, weight=weight)
         assert_that(edge.src_id, is_(equal_to("A")))
