@@ -3,7 +3,7 @@ Tests for sorting algorithms
 """
 
 from src.sorting import insertion_sort, selection_sort, merge_sort, \
-                        quick_sort, heap_sort, bubble_sort
+                        quick_sort, min_heap_sort, max_heap_sort, bubble_sort
 
 
 def test_insertion_sort():
@@ -22,8 +22,11 @@ def test_quick_sort():
     sort_all_arrays(quick_sort)
 
 
-def test_heap_sort():
-    sort_all_arrays(heap_sort)
+def test_min_heap_sort():
+    sort_all_arrays(min_heap_sort)
+
+def test_max_heap_sort():
+    sort_all_arrays(max_heap_sort)
 
 
 def test_bubble_sort():

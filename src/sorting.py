@@ -1,5 +1,5 @@
 import random
-from .heap import MinHeap
+from .heap import MinBinHeap, MaxBinHeap
 
 
 def insertion_sort(array):
@@ -52,10 +52,16 @@ def _merge(left, right):
             merged.append(right.pop(0))
 
 
-# TODO: Add max_heap_sort as well
-def heap_sort(array):
-    h = MinHeap(array)
-    return [h.pop() for _ in range(len(array))]
+def min_heap_sort(array):
+    h = MinBinHeap(array)
+    return [h.pop() for _ in array]
+
+
+def max_heap_sort(array):
+    h = MaxBinHeap(array)
+    result = [h.pop() for _ in array]
+    result.reverse()
+    return result
 
 
 def quick_sort(array):
