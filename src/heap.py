@@ -58,7 +58,7 @@ class BinHeap(object):
         # Swap first and last items
         self.swap_by_indices(0, -1)
 
-        # Get last item and restore heap property
+        # Pop last item and restore heap property
         item = self.items.pop()
         self.heapify_down()
         return item
