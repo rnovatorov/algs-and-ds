@@ -1,5 +1,6 @@
 from pytest import raises
-from src.graph import Graph, Vertex, Edge
+
+from src.ds.graph import Graph, Vertex, Edge
 from src.exceptions import GraphError
 
 

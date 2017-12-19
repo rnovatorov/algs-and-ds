@@ -1,4 +1,4 @@
-from src.heap import BinHeap, MinBinHeap, MaxBinHeap
+from src.ds.bin_heap import BinHeap, MinBinHeap, MaxBinHeap
 
 
 class TestBinHeap(object):

@@ -1,4 +1,4 @@
-from .exceptions import GraphError
+from src.exceptions import GraphError
 
 
 class Graph(object):

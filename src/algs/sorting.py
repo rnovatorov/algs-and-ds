@@ -1,5 +1,5 @@
 import random
-from .heap import MinBinHeap, MaxBinHeap
+from src.ds.bin_heap import MinBinHeap, MaxBinHeap
 
 
 def insertion_sort(array):
@@ -11,15 +11,10 @@ def insertion_sort(array):
 
 
 def selection_sort(array):
-    if len(array) <= 1:
-        return array
-
     for i in range(len(array)):
-        m = array[i]  # Min
-        for j in range(i + 1, len(array)):
-            if array[j] < m:
-                m = array[j]
-        array[i] = m
+        # Find index of smallest item
+        m = min(range(i, len(array)), key=lambda j: array[j])
+        array[i], array[m] = array[m], array[i]
     return array
 
 
@@ -41,11 +36,9 @@ def _merge(left, right):
     merged = []
     while True:
         if not left:
-            merged.extend(right)
-            return merged
+            return merged + right
         if not right:
-            merged.extend(left)
-            return merged
+            return merged + left
         if left[0] < right[0]:
             merged.append(left.pop(0))
         else:
