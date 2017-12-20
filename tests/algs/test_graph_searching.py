@@ -1,3 +1,7 @@
+"""
+Tests for graph searching algorithms
+"""
+
 from src.ds.graph import Graph, Vertex, Edge
 from src.algs.graph_searching import breadth_first_search, depth_first_search
 

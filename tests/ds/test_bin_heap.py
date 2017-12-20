@@ -2,7 +2,9 @@ from src.ds.bin_heap import BinHeap, MinBinHeap, MaxBinHeap
 
 
 class TestBinHeap(object):
-
+    """
+    Tests for Binary Heap base class
+    """
     def create_fake_heap(self, items):
         heap = BinHeap()
         heap.items = items
@@ -48,7 +50,9 @@ class TestBinHeap(object):
 
 
 class TestMinBinHeap(object):
-
+    """
+    Tests for Min Binary Heap data structure
+    """
     def has_min_heap_property(self, min_heap):
         for n, item in enumerate(min_heap):
             if min_heap.has_left_child(n):
@@ -71,7 +75,9 @@ class TestMinBinHeap(object):
 
 
 class TestMaxBinHeap(object):
-
+    """
+    Tests for Min Binary Heap data structure
+    """
     def has_max_heap_property(self, max_heap):
         for n, item in enumerate(max_heap):
             if max_heap.has_left_child(n):
