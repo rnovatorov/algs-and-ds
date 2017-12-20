@@ -40,7 +40,7 @@ def test_insertion_sort(arrays_to_be_sorted):
 
 def test_selection_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert  sorted(array) == selection_sort(array)
+        assert sorted(array) == selection_sort(array)
 
 
 def test_merge_sort(arrays_to_be_sorted):
