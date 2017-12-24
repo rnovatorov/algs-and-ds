@@ -1,6 +1,5 @@
 from pytest import raises
 from src.ds.graph import Graph, Vertex, Edge
-from src.exceptions import GraphError
 
 
 class TestGraph(object):
@@ -44,7 +43,7 @@ class TestGraph(object):
             (A)
         """
         graph = Graph(["A"])
-        with raises(GraphError):
+        with raises(ValueError):
             graph.add_vertex(Vertex("A"))
 
     def test_remove_existing_vertex(self):
@@ -83,7 +82,7 @@ class TestVertex(object):
         assert va.is_connected_to(vb) is False
         va.connect_to(vb)
         assert va.is_connected_to(vb)
-        with raises(GraphError):
+        with raises(ValueError):
             va.connect_to(vb)
 
     def test_disconnect_connected(self):
@@ -97,7 +96,7 @@ class TestVertex(object):
     def test_disconnect_absent(self):
         va, vb = Vertex("A"), Vertex("B")
         assert va.is_connected_to(vb) is False
-        with raises(GraphError):
+        with raises(ValueError):
             va.disconnect_from(vb)
 
 

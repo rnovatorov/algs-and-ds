@@ -1,6 +1,3 @@
-from src.exceptions import GraphError
-
-
 class Graph(object):
     """
     Represents graph data structure
@@ -22,7 +19,7 @@ class Graph(object):
 
     def add_vertex(self, vertex):
         if vertex.id in self.vertices:
-            raise GraphError("%s is already in %s" % (vertex, self))
+            raise ValueError("%s is already in %s" % (vertex, self))
         self.vertices[vertex.id] = vertex
 
     def remove_vertex(self, vertex):
@@ -56,13 +53,13 @@ class Vertex(object):
         if not self.is_connected_to(vertex):
             self.edges[vertex.id] = weight
         else:
-            raise GraphError("%s is already connected to %s" % (self, vertex))
+            raise ValueError("%s is already connected to %s" % (self, vertex))
 
     def disconnect_from(self, vertex):
         if self.is_connected_to(vertex):
             del self.edges[vertex.id]
         else:
-            raise GraphError("%s is not connected to %s" % (self, vertex))
+            raise ValueError("%s is not connected to %s" % (self, vertex))
 
     def is_connected_to(self, vertex):
         return vertex.id in self.edges
