@@ -1,13 +1,13 @@
+# TODO: Add delete
+
+
 class BinSearchTree(object):
 
     def __init__(self, items=None):
         self.root = None
         if items is not None:
-            self._build(items)
-
-    def _build(self, items):
-        for item in items:
-            self.insert(item)
+            for item in items:
+                self.insert(item)
 
     def insert(self, item):
         node = BinTreeNode(key=item)

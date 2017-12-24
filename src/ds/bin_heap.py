@@ -11,9 +11,6 @@ class BinHeap(object):
     def __len__(self):
         return len(self.items)
 
-    def __eq__(self, other):
-        return self.items == other
-
     def __getitem__(self, item):
         return self.items[item]
 
