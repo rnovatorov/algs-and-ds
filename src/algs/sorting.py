@@ -11,38 +11,36 @@ def insertion_sort(array):
 
 
 def selection_sort(array):
-    for i in range(len(array)):
-        # Find index of smallest item
+    for i in range(len(array) - 1):
         m = min(range(i, len(array)), key=lambda j: array[j])
         array[i], array[m] = array[m], array[i]
     return array
 
 
 def merge_sort(array):
-    # Recursion base case
     if len(array) <= 1:
         return array
 
-    # Divide
-    mid = int(len(array) / 2)
+    mid = len(array) // 2
     left, right = array[:mid], array[mid:]
 
-    # Conquer
     return _merge(merge_sort(left), merge_sort(right))
 
 
-# TODO: Find a way to avoid list.pop(0)... deque?
 def _merge(left, right):
     merged = []
+    i_left = i_right = 0
     while True:
-        if not left:
-            return merged + right
-        if not right:
-            return merged + left
-        if left[0] < right[0]:
-            merged.append(left.pop(0))
+        if i_left == len(left):
+            return merged + right[i_right:]
+        if i_right == len(right):
+            return merged + left[i_left:]
+        if left[i_left] < right[i_right]:
+            merged.append(left[i_left])
+            i_left += 1
         else:
-            merged.append(right.pop(0))
+            merged.append(right[i_right])
+            i_right += 1
 
 
 def min_heap_sort(array):
@@ -58,14 +56,11 @@ def max_heap_sort(array):
 
 
 def quick_sort(array):
-    # Recursion base case
     if len(array) <= 1:
         return array
 
-    # Choose pivot
     pivot = random.choice(array)
 
-    # Divide
     left, center, right = [], [], []
     for item in array:
         if item < pivot:
@@ -75,7 +70,6 @@ def quick_sort(array):
         else:
             right.append(item)
 
-    # Conquer
     return quick_sort(left) + center + quick_sort(right)
 
 
@@ -86,7 +80,7 @@ def bubble_sort(array):
             if array[i] > array[i + 1]:
                 array[i], array[i + 1] = array[i + 1], array[i]
                 swapped = True
-        # not swapped => sorted
+        # not swapped -> sorted
         if not swapped:
             break
     return array
