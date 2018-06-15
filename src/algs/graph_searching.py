@@ -11,14 +11,14 @@ def breadth_first_search(graph, src, dst):
     queue = deque([src])
     visited = set()
     while queue:
-        cur_vertex = queue.popleft()
-        if cur_vertex is dst:
+        vertex = queue.popleft()
+        if vertex is dst:
             return True
-        for vid in cur_vertex.edges:
+        for vid in vertex.edges:
             neighbor = graph.vertices[vid]
             if neighbor not in visited:
                 queue.append(neighbor)
-        visited.add(cur_vertex)
+        visited.add(vertex)
     return False
 
 
