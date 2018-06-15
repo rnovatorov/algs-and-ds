@@ -11,14 +11,14 @@ class BinHeap(object):
     def __len__(self):
         return len(self.items)
 
-    def __getitem__(self, item):
-        return self.items[item]
+    def __getitem__(self, key):
+        return self.items[key]
 
     def __setitem__(self, key, value):
         self.items[key] = value
 
-    def has_parent(self, n):
-        return n > 0
+    def is_root(self, n):
+        return n == 0
 
     def has_children(self, n):
         return self.has_left_child(n) or self.has_right_child(n)
@@ -60,6 +60,18 @@ class BinHeap(object):
         self.heapify_down()
         return item
 
+    def choose_child(self, func, parent_index):
+        left_child_index = self.left_child_index(parent_index)
+        right_child_index = self.right_child_index(parent_index)
+        if self.has_right_child(parent_index):
+            return func(
+                left_child_index,
+                right_child_index,
+                key=lambda i: self[i]  # By value
+            )
+        else:
+            return left_child_index  # The only child
+
     def heapify_up(self):
         raise NotImplementedError
 
@@ -71,7 +83,7 @@ class MinBinHeap(BinHeap):
 
     def heapify_up(self):
         cur_item_index = len(self) - 1
-        while self.has_parent(cur_item_index):
+        while not self.is_root(cur_item_index):
             cur_parent_index = self.parent_index(cur_item_index)
 
             # Must have a left child if has a right one
@@ -116,7 +128,7 @@ class MaxBinHeap(BinHeap):
 
     def heapify_up(self):
         cur_item_index = len(self) - 1
-        while self.has_parent(cur_item_index):
+        while not self.is_root(cur_item_index):
             cur_parent_index = self.parent_index(cur_item_index)
 
             # Must have a left child if has a right one

@@ -25,11 +25,11 @@ class TestBinHeap(object):
         assert not heap.has_right_child(1)
         assert not heap.has_right_child(2)
 
-    def test_has_parent(self):
+    def test_is_root(self):
         heap = self.create_fake_heap(range(3))
-        assert not heap.has_parent(heap[0])
-        assert heap.has_parent(heap[1])
-        assert heap.has_parent(heap[2])
+        assert heap.is_root(heap[0])
+        assert not heap.is_root(heap[1])
+        assert not heap.is_root(heap[2])
 
     def test_left_child_index(self):
         heap = self.create_fake_heap(range(42))
