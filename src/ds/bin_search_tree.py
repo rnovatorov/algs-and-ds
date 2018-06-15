@@ -2,7 +2,9 @@
 
 
 class BinSearchTree(object):
-
+    """
+    https://en.wikipedia.org/wiki/Binary_search_tree
+    """
     def __init__(self, items=None):
         self.root = None
         if items is not None:

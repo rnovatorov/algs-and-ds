@@ -5,6 +5,9 @@ from collections import deque
 
 
 def breadth_first_search(graph, src, dst):
+    """
+    https://en.wikipedia.org/wiki/Breadth-first_search
+    """
     queue = deque([src])
     visited = set()
     while queue:
@@ -20,6 +23,9 @@ def breadth_first_search(graph, src, dst):
 
 
 def depth_first_search(graph, src, dst, visited=None):
+    """
+    https://en.wikipedia.org/wiki/Depth-first_search
+    """
     if src is dst:
         return True
     if visited is None:
@@ -34,4 +40,7 @@ def depth_first_search(graph, src, dst, visited=None):
 
 
 def dijkstra(graph, src, dst):
+    """
+    https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+    """
     raise NotImplementedError

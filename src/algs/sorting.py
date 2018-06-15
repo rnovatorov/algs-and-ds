@@ -3,6 +3,9 @@ from src.ds.bin_heap import MinBinHeap, MaxBinHeap
 
 
 def insertion_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Insertion_sort
+    """
     for i in range(1, len(array)):
         for j in range(i):
             if array[i] < array[j]:
@@ -11,6 +14,9 @@ def insertion_sort(array):
 
 
 def selection_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Selection_sort
+    """
     for i in range(len(array) - 1):
         m = min(range(i, len(array)), key=lambda j: array[j])
         array[i], array[m] = array[m], array[i]
@@ -18,6 +24,9 @@ def selection_sort(array):
 
 
 def merge_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Merge_sort
+    """
     if len(array) <= 1:
         return array
 
@@ -28,6 +37,9 @@ def merge_sort(array):
 
 
 def _merge(left, right):
+    """
+    "Merge" part of merge sort.
+    """
     merged = []
     i_left = i_right = 0
     while True:
@@ -44,11 +56,17 @@ def _merge(left, right):
 
 
 def min_heap_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Heapsort
+    """
     h = MinBinHeap(array)
     return [h.pop() for _ in array]
 
 
 def max_heap_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Heapsort
+    """
     h = MaxBinHeap(array)
     result = [h.pop() for _ in array]
     result.reverse()
@@ -56,6 +74,9 @@ def max_heap_sort(array):
 
 
 def quick_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Quicksort
+    """
     if len(array) <= 1:
         return array
 
@@ -74,6 +95,9 @@ def quick_sort(array):
 
 
 def bubble_sort(array):
+    """
+    https://en.wikipedia.org/wiki/Bubble_sort
+    """
     while True:
         swapped = False
         for i in range(len(array) - 1):

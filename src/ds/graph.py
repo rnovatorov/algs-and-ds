@@ -1,6 +1,6 @@
 class Graph(object):
     """
-    Represents graph data structure
+    https://en.wikipedia.org/wiki/Graph_(abstract_data_type)
     """
     def __init__(self, vids=None, edges=None):
         self.vertices = {}
@@ -40,7 +40,7 @@ class Graph(object):
 
 class Vertex(object):
     """
-    Represents graph's vertex
+    Represents graph's vertex.
     """
     def __init__(self, id):
         self.id = id
@@ -67,7 +67,7 @@ class Vertex(object):
 
 class Edge(object):
     """
-    Represents graph's edge
+    Represents graph's edge.
     """
     def __init__(self, src_id, dst_id, directed=False, weight=None):
         self.src_id = src_id

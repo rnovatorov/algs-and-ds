@@ -3,7 +3,7 @@
 
 class RadixTree(object):
     """
-    Represents Radix Tree data structure
+    https://en.wikipedia.org/wiki/Radix_tree
     """
     def __init__(self, word_list):
         self.root = RadixTreeNode(word_list)
@@ -14,7 +14,7 @@ class RadixTree(object):
 
 class RadixTreeNode(object):
     """
-    Represent a node in RadixTree
+    Represent a node in a RadixTree.
     """
     def __init__(self, word_list, depth=0):
         self.children = {}

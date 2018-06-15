@@ -1,6 +1,6 @@
 class BinHeap(object):
     """
-    Represents heap data structure
+    https://en.wikipedia.org/wiki/Binary_heap
     """
     def __init__(self, items=None):
         self.items = []
