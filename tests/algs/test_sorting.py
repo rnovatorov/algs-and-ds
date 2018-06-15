@@ -35,34 +35,34 @@ def arrays_to_be_sorted():
 
 def test_insertion_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == insertion_sort(array)
+        assert insertion_sort(array) == sorted(array)
 
 
 def test_selection_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == selection_sort(array)
+        assert selection_sort(array) == sorted(array)
 
 
 def test_merge_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == merge_sort(array)
+        assert merge_sort(array) == sorted(array)
 
 
 def test_quick_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == quick_sort(array)
+        assert quick_sort(array) == sorted(array)
 
 
 def test_min_heap_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == min_heap_sort(array)
+        assert min_heap_sort(array) == sorted(array)
 
 
 def test_max_heap_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == max_heap_sort(array)
+        assert max_heap_sort(array) == sorted(array)
 
 
 def test_bubble_sort(arrays_to_be_sorted):
     for array in arrays_to_be_sorted:
-        assert sorted(array) == bubble_sort(array)
+        assert bubble_sort(array) == sorted(array)

@@ -82,88 +82,88 @@ class BinHeap(object):
 class MinBinHeap(BinHeap):
 
     def heapify_up(self):
-        cur_item_index = len(self) - 1
-        while not self.is_root(cur_item_index):
-            cur_parent_index = self.parent_index(cur_item_index)
+        item_index = len(self) - 1
+        while not self.is_root(item_index):
+            parent_index = self.parent_index(item_index)
 
             # Must have a left child if has a right one
-            if self.has_right_child(cur_parent_index):
+            if self.has_right_child(parent_index):
                 min_child_index = min(
-                    self.left_child_index(cur_parent_index),
-                    self.right_child_index(cur_parent_index),
+                    self.left_child_index(parent_index),
+                    self.right_child_index(parent_index),
                     key=lambda i: self[i]  # By item value
                 )
             else:
-                min_child_index = self.left_child_index(cur_parent_index)
+                min_child_index = item_index
 
             # If heap property is not violated
-            if self[min_child_index] >= self[cur_parent_index]:
+            if self[min_child_index] >= self[parent_index]:
                 return
 
-            self.swap_by_indices(min_child_index, cur_parent_index)
-            cur_item_index = cur_parent_index
+            self.swap_by_indices(min_child_index, parent_index)
+            item_index = parent_index
 
     def heapify_down(self):
-        cur_item_index = 0
-        while self.has_children(cur_item_index):
+        item_index = 0
+        while self.has_children(item_index):
             # Must have a left child if has a right one
-            if self.has_right_child(cur_item_index):
+            if self.has_right_child(item_index):
                 min_child_index = min(
-                    self.left_child_index(cur_item_index),
-                    self.right_child_index(cur_item_index),
+                    self.left_child_index(item_index),
+                    self.right_child_index(item_index),
                     key=lambda i: self[i]  # By item value
                 )
             else:
-                min_child_index = self.left_child_index(cur_item_index)
+                min_child_index = self.left_child_index(item_index)
 
             # If heap property is not violated
-            if self[min_child_index] >= self[cur_item_index]:
+            if self[min_child_index] >= self[item_index]:
                 return
 
-            self.swap_by_indices(min_child_index, cur_item_index)
-            cur_item_index = min_child_index
+            self.swap_by_indices(min_child_index, item_index)
+            item_index = min_child_index
 
 
 class MaxBinHeap(BinHeap):
 
     def heapify_up(self):
-        cur_item_index = len(self) - 1
-        while not self.is_root(cur_item_index):
-            cur_parent_index = self.parent_index(cur_item_index)
+        item_index = len(self) - 1
+        while not self.is_root(item_index):
+            parent_index = self.parent_index(item_index)
 
             # Must have a left child if has a right one
-            if self.has_right_child(cur_parent_index):
+            if self.has_right_child(parent_index):
                 max_child_index = max(
-                    self.left_child_index(cur_parent_index),
-                    self.right_child_index(cur_parent_index),
+                    self.left_child_index(parent_index),
+                    self.right_child_index(parent_index),
                     key=lambda i: self[i]  # By item value
                 )
             else:
-                max_child_index = self.left_child_index(cur_parent_index)
+                max_child_index = item_index
 
             # If heap property is not violated
-            if self[max_child_index] <= self[cur_parent_index]:
+            if self[max_child_index] <= self[parent_index]:
                 return
 
-            self.swap_by_indices(max_child_index, cur_parent_index)
-            cur_item_index = cur_parent_index
+            self.swap_by_indices(max_child_index, parent_index)
+            item_index = parent_index
 
     def heapify_down(self):
-        cur_item_index = 0
-        while self.has_children(cur_item_index):
+        item_index = 0
+        while self.has_children(item_index):
             # Must have a left child if has a right one
-            if self.has_right_child(cur_item_index):
+            if self.has_right_child(item_index):
                 max_child_index = max(
-                    self.left_child_index(cur_item_index),
-                    self.right_child_index(cur_item_index),
+                    self.left_child_index(item_index),
+                    self.right_child_index(item_index),
                     key=lambda i: self[i]  # By item value
                 )
             else:
-                max_child_index = self.left_child_index(cur_item_index)
+                max_child_index = self.left_child_index(item_index)
 
             # If heap property is not violated
-            if self[max_child_index] <= self[cur_item_index]:
+            if self[max_child_index] <= self[item_index]:
                 return
 
-            self.swap_by_indices(max_child_index, cur_item_index)
-            cur_item_index = max_child_index
+            self.swap_by_indices(max_child_index, item_index)
+            item_index = max_child_index
