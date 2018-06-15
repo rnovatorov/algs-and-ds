@@ -60,18 +60,6 @@ class BinHeap(object):
         self.heapify_down()
         return item
 
-    def choose_child(self, func, parent_index):
-        left_child_index = self.left_child_index(parent_index)
-        right_child_index = self.right_child_index(parent_index)
-        if self.has_right_child(parent_index):
-            return func(
-                left_child_index,
-                right_child_index,
-                key=lambda i: self[i]  # By value
-            )
-        else:
-            return left_child_index  # The only child
-
     def heapify_up(self):
         raise NotImplementedError
 
