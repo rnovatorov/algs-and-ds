@@ -3,7 +3,54 @@ from src.ds.graph import Graph
 from src.algs.path_finding import dijkstra
 
 
-def wiki(algorithm):
+def empty_graph(algorithm):
+    """
+    Graph:
+        *empty*
+    """
+    graph = Graph()
+
+    assert algorithm(graph, "X", "Y") is None
+
+
+def src_is_dst(algorithm):
+    """
+    Graph:
+        (A)---(B)
+    """
+    graph = Graph()
+    graph.connect("A", "B", bidir=True)
+
+    assert list(algorithm(graph, "A", "A")) == ["A"]
+
+
+def nonexistent_src(algorithm):
+    """
+    Graph:
+        (A)---(B)
+    """
+    graph = Graph()
+    graph.connect("A", "B", bidir=True)
+
+    assert algorithm(graph, "X", "A") is None
+
+
+def nonexistent_dst(algorithm):
+    """
+    Graph:
+        (A)---(B)
+    """
+    graph = Graph()
+    graph.connect("A", "B", bidir=True)
+
+    assert algorithm(graph, "A", "X") is None
+
+
+def undirected_graph(algorithm):
+    """
+    Graph:
+        https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif
+    """
     graph = Graph()
     edges = [
         ("A", "B", 7),
@@ -19,11 +66,15 @@ def wiki(algorithm):
     for edge in edges:
         graph.connect(*edge, bidir=True)
 
-    assert algorithm(graph, "A", "E") == ("A", "C", "F", "E")
+    assert list(algorithm(graph, "A", "E")) == ["A", "C", "F", "E"]
 
 
 @pytest.mark.parametrize("task", [
-    wiki,
+    undirected_graph,
+    empty_graph,
+    src_is_dst,
+    nonexistent_src,
+    nonexistent_dst,
 ])
 @pytest.mark.parametrize("algorithm", [
     dijkstra,

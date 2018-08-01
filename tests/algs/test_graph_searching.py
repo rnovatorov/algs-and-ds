@@ -73,7 +73,7 @@ def search_in_cyclic_graph(algorithm):
 
 def search_in_bidirectionally_cyclic_graph(algorithm):
     """
-    Graph:https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+    Graph:
                      .---(D)---.
                      |         |
         (A)---(B)---(C)       (F)---(G)
