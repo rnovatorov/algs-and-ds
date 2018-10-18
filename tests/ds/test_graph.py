@@ -51,4 +51,3 @@ class TestGraph(object):
             "B": {},
             "C": {}
         }
-

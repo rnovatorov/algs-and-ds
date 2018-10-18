@@ -81,4 +81,3 @@ def undirected_graph(algorithm):
 ])
 def test_path_finding(task, algorithm):
     task(algorithm)
-

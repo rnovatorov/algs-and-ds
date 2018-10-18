@@ -14,6 +14,10 @@ def dijkstra(graph, src, dst):
     while unvisited:
         current = min(unvisited, key=lambda vertex: distances[vertex])
 
+        # If path does not exist.
+        if distances[current] == INF:
+            return None
+
         # If path is found.
         if current == dst:
             path = [dst]
@@ -22,10 +26,6 @@ def dijkstra(graph, src, dst):
                 path.append(next)
                 current = next                
             return reversed(path)
-
-        # If path does not exist.
-        if distances[current] == INF:
-            return None
 
         unvisited.remove(current)
 
@@ -42,6 +42,5 @@ def dijkstra(graph, src, dst):
                 distances[neighbor] = distance
                 prev[neighbor] = current
 
-    # No such vertex in graph.
+    # No dst in graph.
     return None
-

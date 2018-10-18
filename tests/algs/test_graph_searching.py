@@ -110,4 +110,3 @@ def search_in_bidirectionally_cyclic_graph(algorithm):
 ])
 def test_graph_searching(task, algorithm):
     task(algorithm)
-

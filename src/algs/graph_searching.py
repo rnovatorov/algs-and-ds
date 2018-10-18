@@ -47,4 +47,3 @@ def depth_first_search(graph, src, dst, visited=None):
                 return True
 
     return False
-

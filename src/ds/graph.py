@@ -28,4 +28,3 @@ class Graph(object):
 
         if bidir:
             self.disconnect(dst, src)
-

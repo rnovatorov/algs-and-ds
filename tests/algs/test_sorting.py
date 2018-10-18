@@ -6,7 +6,7 @@ from src.algs.sorting import insertion_sort, selection_sort, merge_sort,\
 def create_task(array):
 
     def task(algorithm):
-        assert algorithm(array) == sorted(array)
+        assert sorted(array) == algorithm(array)
 
     return task
 
@@ -44,4 +44,3 @@ def create_task(array):
 ])
 def test_sorting(task, algorithm):
     task(algorithm)
-
