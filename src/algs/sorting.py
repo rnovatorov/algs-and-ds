@@ -1,4 +1,3 @@
-import random
 from src.ds.bin_heap import MinBinHeap, MaxBinHeap
 
 
@@ -77,21 +76,20 @@ def quick_sort(array):
     """
     https://en.wikipedia.org/wiki/Quicksort
     """
-    if len(array) <= 1:
+    if not array:
         return array
 
-    pivot = random.choice(array)
+    pivot = array.pop()
 
-    left, center, right = [], [], []
+    left, right = [], []
+
     for item in array:
-        if item < pivot:
+        if item <= pivot:
             left.append(item)
-        elif item == pivot:
-            center.append(item)
         else:
             right.append(item)
 
-    return quick_sort(left) + center + quick_sort(right)
+    return quick_sort(left) + [pivot] + quick_sort(right)
 
 
 def bubble_sort(array):
