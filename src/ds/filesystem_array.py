@@ -1,16 +1,7 @@
 import os
 from tempfile import TemporaryFile
-from .sorting import quick_sort_inplace
 
-
-def file_sort(src_file, dst_file):
-    array = FilesystemArray.from_numbers_file(
-        src_file=src_file,
-        int_len=4,
-        signed=True
-    )
-    quick_sort_inplace(array)
-    array.to_numbers_file(dst_file)
+from src.algs.sorting import quick_sort_inplace
 
 
 class FilesystemArray:
@@ -42,6 +33,8 @@ class FilesystemArray:
 
     def __del__(self):
         self.file.close()
+
+    sort = quick_sort_inplace
 
     def to_numbers_file(self, dst):
         self.file.seek(0)
