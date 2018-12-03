@@ -1,19 +1,16 @@
 import os
 from tempfile import TemporaryFile
+from .sorting import quick_sort_inplace
 
 
-def file_sort(src_filename, dst_filename):
+def file_sort(src_file, dst_file):
     array = FilesystemArray.from_numbers_file(
-        src_filename=src_filename,
+        src_file=src_file,
         int_len=4,
-        signed=False
+        signed=True
     )
-    quick_sort_in_place(array, 0, len(array))
-    array.to_numbers_file(dst_filename)
-
-
-def quick_sort_in_place(array, start, stop):
-    raise NotImplementedError
+    quick_sort_inplace(array)
+    array.to_numbers_file(dst_file)
 
 
 class FilesystemArray:
@@ -33,34 +30,35 @@ class FilesystemArray:
         if item >= len(self):
             raise IndexError
         self.file.seek(self.int_len * item)
-        return self.file.read(self.int_len)
+        as_bytes = self.file.read(self.int_len)
+        return int.from_bytes(as_bytes, self.BYTE_ORDER,
+                              signed=self.signed)
 
     def __setitem__(self, key, value):
-        assert len(value) == self.int_len
         self.file.seek(self.int_len * key)
-        self.file.write(value)
+        as_bytes = value.to_bytes(self.int_len, self.BYTE_ORDER,
+                                  signed=self.signed)
+        self.file.write(as_bytes)
 
     def __del__(self):
         self.file.close()
 
-    def to_numbers_file(self, dst_filename):
+    def to_numbers_file(self, dst):
         self.file.seek(0)
-        with open(dst_filename, 'w') as dst:
-            for as_bytes in self:
-                number = int.from_bytes(as_bytes, self.BYTE_ORDER, signed=self.signed)
-                dst.write(f'{number}\n')
+        for number in self:
+            dst.write(f'{number}\n')
 
     @classmethod
     def from_numbers_file(
-            cls,
-            src_filename,
-            int_len,
-            signed
+        cls,
+        src_file,
+        int_len,
+        signed
     ):
-        with open(src_filename, 'r') as src_file:
-            dst_file = TemporaryFile('rb+')
-            for line in src_file:
-                number = int(line.strip())
-                as_bytes = number.to_bytes(int_len, cls.BYTE_ORDER, signed=signed)
-                dst_file.write(as_bytes)
+        dst_file = TemporaryFile('rb+')
+        for line in src_file:
+            number = int(line.strip())
+            as_bytes = number.to_bytes(int_len, cls.BYTE_ORDER,
+                                       signed=signed)
+            dst_file.write(as_bytes)
         return cls(dst_file, int_len, signed)
