@@ -92,6 +92,32 @@ def quick_sort(array):
     return quick_sort(left) + [pivot] + quick_sort(right)
 
 
+def quick_sort_inplace(array, i_first=0, i_last=None):
+    """
+    https://en.wikipedia.org/wiki/Quicksort
+    """
+    if i_last is None:
+        i_last = len(array) - 1
+
+    if i_last <= i_first:
+        return array
+
+    i_cur = i_large = i_first
+
+    while i_cur != i_last:
+        if array[i_cur] < array[i_last]:
+            array[i_cur], array[i_large] = array[i_large], array[i_cur]
+            i_large += 1
+        i_cur += 1
+
+    array[i_last], array[i_large] = array[i_large], array[i_last]
+
+    quick_sort_inplace(array, i_first, i_large - 1)
+    quick_sort_inplace(array, i_large + 1, i_last)
+
+    return array
+
+
 def bubble_sort(array):
     """
     https://en.wikipedia.org/wiki/Bubble_sort

@@ -1,12 +1,13 @@
 import pytest
-from src.algs.sorting import insertion_sort, selection_sort, merge_sort,\
-    quick_sort, min_heap_sort, max_heap_sort, bubble_sort
+from src.algs.sorting import insertion_sort, selection_sort, merge_sort, \
+    quick_sort, quick_sort_inplace, min_heap_sort, max_heap_sort, bubble_sort
 
 
 def create_task(array):
 
     def task(algorithm):
-        assert sorted(array) == algorithm(array)
+        sorted_array = sorted(array)
+        assert algorithm(array) == sorted_array
 
     return task
 
@@ -38,6 +39,7 @@ def create_task(array):
     selection_sort,
     merge_sort,
     quick_sort,
+    quick_sort_inplace,
     min_heap_sort,
     max_heap_sort,
     bubble_sort,
