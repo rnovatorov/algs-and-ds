@@ -1,4 +1,4 @@
-INF = float("inf")
+INF = float('inf')
 
 
 def dijkstra(graph, src, dst):

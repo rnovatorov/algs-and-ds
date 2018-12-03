@@ -9,7 +9,7 @@ INT_LEN = 4
 SIGNED = True
 
 
-@pytest.mark.parametrize("array", [
+@pytest.mark.parametrize('array', [
     # No items
     [],
 

@@ -1,4 +1,5 @@
 import pytest
+
 from src.algs.sorting import insertion_sort, selection_sort, merge_sort, \
     quick_sort, quick_sort_inplace, min_heap_sort, max_heap_sort, bubble_sort
 
@@ -12,7 +13,7 @@ def create_task(array):
     return task
 
 
-@pytest.mark.parametrize("task", map(create_task, [
+@pytest.mark.parametrize('task', map(create_task, [
     # No items
     [],
 
@@ -34,7 +35,7 @@ def create_task(array):
     # Same items
     [42] * 8,
 ]))
-@pytest.mark.parametrize("algorithm", [
+@pytest.mark.parametrize('algorithm', [
     insertion_sort,
     selection_sort,
     merge_sort,

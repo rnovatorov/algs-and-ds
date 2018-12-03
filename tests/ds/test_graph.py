@@ -9,45 +9,45 @@ class TestGraph(object):
         assert graph._conns == {}
 
         # Default connection weight
-        graph.connect("A", "B")
+        graph.connect('A', 'B')
         assert graph._conns == {
-            "A": {
-                "B": Graph.DEFAULT_WEIGHT
+            'A': {
+                'B': Graph.DEFAULT_WEIGHT
             },
-            "B" : {}
+            'B' : {}
         }
 
         # Custom connection weight
-        graph.connect("B", "A", weight=2)
+        graph.connect('B', 'A', weight=2)
         assert graph._conns == {
-            "A": {
-                "B": Graph.DEFAULT_WEIGHT
+            'A': {
+                'B': Graph.DEFAULT_WEIGHT
             },
-            "B": {
-                "A": 2
+            'B': {
+                'A': 2
             }
         }
 
         # More connections
-        graph.connect("A", "C", weight=3)
+        graph.connect('A', 'C', weight=3)
         assert graph._conns == {
-            "A": {
-                "B": Graph.DEFAULT_WEIGHT,
-                "C": 3
+            'A': {
+                'B': Graph.DEFAULT_WEIGHT,
+                'C': 3
             },
-            "B": {
-                "A": 2
+            'B': {
+                'A': 2
             },
-            "C": {}
+            'C': {}
         }
 
         # Disconnect
-        graph.disconnect("B", "A")
+        graph.disconnect('B', 'A')
         assert graph._conns == {
-            "A": {
-                "B": Graph.DEFAULT_WEIGHT,
-                "C": 3
+            'A': {
+                'B': Graph.DEFAULT_WEIGHT,
+                'C': 3
             },
-            "B": {},
-            "C": {}
+            'B': {},
+            'C': {}
         }
