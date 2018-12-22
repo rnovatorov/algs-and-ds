@@ -10,43 +10,43 @@ class FileSysIntList:
     def __init__(
         self,
         file=None,
-        int_length=4,
-        byte_order=sys.byteorder,
+        int_len=4,
+        byteorder=sys.byteorder,
         signed=True
     ):
-        self.file = file or TemporaryFile('rb+')
-        self.int_length = int_length
-        self.byte_order = byte_order
+        self._file = file or TemporaryFile('rb+')
+        self.int_len = int_len
+        self.byteorder = byteorder
         self.signed = signed
 
     def __repr__(self):
         return f'{type(self).__name__}()'
 
     def __len__(self):
-        self.file.seek(0, os.SEEK_END)
-        return self.file.tell() // self.int_length
+        self._file.seek(0, os.SEEK_END)
+        return self._file.tell() // self.int_len
 
     def __getitem__(self, key):
         key = self._validate_key(key)
-        self.file.seek(key * self.int_length)
+        self._file.seek(key * self.int_len)
 
-        bytes_ = self.file.read(self.int_length)
-        return int.from_bytes(bytes_, self.byte_order,
+        bytes_ = self._file.read(self.int_len)
+        return int.from_bytes(bytes_, self.byteorder,
                               signed=self.signed)
 
     def __setitem__(self, key, value):
         key = self._validate_key(key)
-        self.file.seek(key * self.int_length)
+        self._file.seek(key * self.int_len)
 
-        bytes_ = value.to_bytes(self.int_length, self.byte_order,
+        bytes_ = value.to_bytes(self.int_len, self.byteorder,
                                 signed=self.signed)
-        self.file.write(bytes_)
+        self._file.write(bytes_)
 
     def __del__(self):
-        self.file.close()
+        self._file.close()
 
     def append(self, value):
-        self.file.truncate((len(self) + 1) * self.int_length)
+        self._file.truncate((len(self) + 1) * self.int_len)
         self[len(self) - 1] = value
 
     def pop(self):
@@ -54,7 +54,7 @@ class FileSysIntList:
             raise IndexError(f'pop from empty {type(self).__name__!r}')
 
         value = self[len(self) - 1]
-        self.file.truncate((len(self) - 1) * self.int_length)
+        self._file.truncate((len(self) - 1) * self.int_len)
         return value
 
     sort = quick_sort_inplace
