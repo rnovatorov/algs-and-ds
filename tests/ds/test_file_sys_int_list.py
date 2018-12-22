@@ -1,4 +1,3 @@
-
 import pytest
 
 from src.ds.file_sys_int_list import FileSysIntList
@@ -9,7 +8,7 @@ def fixture_fsl():
     return FileSysIntList()
 
 
-@pytest.mark.parametrize('array', [
+@pytest.mark.parametrize('lst', [
     # No items
     [],
 
@@ -31,11 +30,10 @@ def fixture_fsl():
     # Same items
     [42] * 8,
 ])
-def test_sorting(fsl, array):
-    for value in array:
-        fsl.append(value)
+def test_sorting(fsl, lst):
+    fsl.extend(lst)
     fsl.sort()
-    assert list(fsl) == sorted(array)
+    assert list(fsl) == sorted(lst)
 
 
 def test_mutating(fsl):

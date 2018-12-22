@@ -4,11 +4,11 @@ from src.algs.sorting import insertion_sort, selection_sort, merge_sort, \
     quick_sort, quick_sort_inplace, min_heap_sort, max_heap_sort, bubble_sort
 
 
-def create_task(array):
+def create_task(lst):
 
     def task(algorithm):
-        sorted_array = sorted(array)
-        assert algorithm(array) == sorted_array
+        sorted_lst = sorted(lst)
+        assert algorithm(lst) == sorted_lst
 
     return task
 

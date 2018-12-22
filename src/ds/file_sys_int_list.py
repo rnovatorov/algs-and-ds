@@ -45,6 +45,10 @@ class FileSysIntList:
     def __del__(self):
         self._file.close()
 
+    def extend(self, iterable):
+        for value in iterable:
+            self.append(value)
+
     def append(self, value):
         self._file.truncate((len(self) + 1) * self.int_len)
         self[len(self) - 1] = value

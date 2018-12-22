@@ -1,36 +1,36 @@
 from src.ds.bin_heap import MinBinHeap, MaxBinHeap
 
 
-def insertion_sort(array):
+def insertion_sort(lst):
     """
     https://en.wikipedia.org/wiki/Insertion_sort
     """
-    for i in range(1, len(array)):
+    for i in range(1, len(lst)):
         for j in range(i):
-            if array[i] < array[j]:
-                array.insert(j, array.pop(i))
-    return array
+            if lst[i] < lst[j]:
+                lst.insert(j, lst.pop(i))
+    return lst
 
 
-def selection_sort(array):
+def selection_sort(lst):
     """
     https://en.wikipedia.org/wiki/Selection_sort
     """
-    for i in range(len(array) - 1):
-        m = min(range(i, len(array)), key=lambda j: array[j])
-        array[i], array[m] = array[m], array[i]
-    return array
+    for i in range(len(lst) - 1):
+        m = min(range(i, len(lst)), key=lambda j: lst[j])
+        lst[i], lst[m] = lst[m], lst[i]
+    return lst
 
 
-def merge_sort(array):
+def merge_sort(lst):
     """
     https://en.wikipedia.org/wiki/Merge_sort
     """
-    if len(array) <= 1:
-        return array
+    if len(lst) <= 1:
+        return lst
 
-    mid = len(array) // 2
-    left, right = array[:mid], array[mid:]
+    mid = len(lst) // 2
+    left, right = lst[:mid], lst[mid:]
 
     return _merge(merge_sort(left), merge_sort(right))
 
@@ -54,36 +54,36 @@ def _merge(left, right):
             i_right += 1
 
 
-def min_heap_sort(array):
+def min_heap_sort(lst):
     """
     https://en.wikipedia.org/wiki/Heapsort
     """
-    h = MinBinHeap(array)
-    return [h.pop() for _ in array]
+    h = MinBinHeap(lst)
+    return [h.pop() for _ in lst]
 
 
-def max_heap_sort(array):
+def max_heap_sort(lst):
     """
     https://en.wikipedia.org/wiki/Heapsort
     """
-    h = MaxBinHeap(array)
-    result = [h.pop() for _ in array]
+    h = MaxBinHeap(lst)
+    result = [h.pop() for _ in lst]
     result.reverse()
     return result
 
 
-def quick_sort(array):
+def quick_sort(lst):
     """
     https://en.wikipedia.org/wiki/Quicksort
     """
-    if not array:
-        return array
+    if not lst:
+        return lst
 
-    pivot = array.pop()
+    pivot = lst.pop()
 
     left, right = [], []
 
-    for item in array:
+    for item in lst:
         if item <= pivot:
             left.append(item)
         else:
@@ -92,43 +92,43 @@ def quick_sort(array):
     return quick_sort(left) + [pivot] + quick_sort(right)
 
 
-def quick_sort_inplace(array, i_first=0, i_last=None):
+def quick_sort_inplace(lst, i_first=0, i_last=None):
     """
     https://en.wikipedia.org/wiki/Quicksort
     """
     if i_last is None:
-        i_last = len(array) - 1
+        i_last = len(lst) - 1
 
     if i_last <= i_first:
-        return array
+        return lst
 
     i_cur = i_large = i_first
 
     while i_cur != i_last:
-        if array[i_cur] < array[i_last]:
-            array[i_cur], array[i_large] = array[i_large], array[i_cur]
+        if lst[i_cur] < lst[i_last]:
+            lst[i_cur], lst[i_large] = lst[i_large], lst[i_cur]
             i_large += 1
         i_cur += 1
 
-    array[i_last], array[i_large] = array[i_large], array[i_last]
+    lst[i_last], lst[i_large] = lst[i_large], lst[i_last]
 
-    quick_sort_inplace(array, i_first, i_large - 1)
-    quick_sort_inplace(array, i_large + 1, i_last)
+    quick_sort_inplace(lst, i_first, i_large - 1)
+    quick_sort_inplace(lst, i_large + 1, i_last)
 
-    return array
+    return lst
 
 
-def bubble_sort(array):
+def bubble_sort(lst):
     """
     https://en.wikipedia.org/wiki/Bubble_sort
     """
     while True:
         swapped = False
-        for i in range(len(array) - 1):
-            if array[i] > array[i + 1]:
-                array[i], array[i + 1] = array[i + 1], array[i]
+        for i in range(len(lst) - 1):
+            if lst[i] > lst[i + 1]:
+                lst[i], lst[i + 1] = lst[i + 1], lst[i]
                 swapped = True
         # not swapped -> sorted
         if not swapped:
             break
-    return array
+    return lst
