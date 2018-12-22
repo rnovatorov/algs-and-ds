@@ -51,7 +51,7 @@ class FileSysIntList:
 
     def pop(self):
         if not len(self):
-            raise IndexError(f'pop from empty {type(self).__name__!r}')
+            raise IndexError(f'pop from empty {type(self).__name__}')
 
         value = self[len(self) - 1]
         self._file.truncate((len(self) - 1) * self.int_len)
@@ -61,14 +61,14 @@ class FileSysIntList:
 
     def _validate_key(self, key):
         if isinstance(key, slice):
-            raise TypeError(f'{type(self).__name__!r} '
+            raise TypeError(f'{type(self).__name__} '
                             f'does not support slices')
 
         if key < 0:
             key += len(self)
 
         if not 0 <= key < len(self):
-            raise IndexError(f'{type(self).__name__!r} '
+            raise IndexError(f'{type(self).__name__} '
                              f'assignment index out of range')
 
         return key
