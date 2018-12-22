@@ -4,6 +4,11 @@ import pytest
 from src.ds.file_sys_int_list import FileSysIntList
 
 
+@pytest.fixture(name='fsl')
+def fixture_fsl():
+    return FileSysIntList()
+
+
 @pytest.mark.parametrize('array', [
     # No items
     [],
@@ -26,34 +31,55 @@ from src.ds.file_sys_int_list import FileSysIntList
     # Same items
     [42] * 8,
 ])
-def test_sorting(array):
-    fsl = FileSysIntList()
+def test_sorting(fsl, array):
     for value in array:
         fsl.append(value)
     fsl.sort()
     assert list(fsl) == sorted(array)
 
 
-def test_append_and_pop():
-    fsl = FileSysIntList()
+def test_mutating(fsl):
     assert len(fsl) == 0
 
     with pytest.raises(IndexError):
         fsl.pop()
 
-    fsl.append(0)
+    fsl.append(42)
     assert len(fsl) == 1
-    assert fsl[0] == 0
+    assert fsl[0] == 42
 
-    fsl.append(1)
+    fsl.append(43)
     assert len(fsl) == 2
-    assert fsl[1] == 1
+    assert fsl[1] == 43
 
-    assert fsl.pop() == 1
+    assert fsl.pop() == 43
     assert len(fsl) == 1
 
-    assert fsl.pop() == 0
+    assert fsl.pop() == 42
     assert len(fsl) == 0
 
     with pytest.raises(IndexError):
         fsl.pop()
+
+
+def test_indexing(fsl):
+    with pytest.raises(TypeError):
+        fsl[:]
+
+    with pytest.raises(IndexError):
+        fsl.pop()
+
+    with pytest.raises(IndexError):
+        fsl[0]
+
+    with pytest.raises(IndexError):
+        fsl[0] = 42
+
+    with pytest.raises(IndexError):
+        fsl[-1]
+
+    fsl.append(42)
+    assert fsl[-1] == 42
+
+    fsl[-1] = 43
+    assert fsl[0] == fsl[-1] == 43

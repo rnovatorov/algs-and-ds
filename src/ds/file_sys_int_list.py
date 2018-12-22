@@ -18,40 +18,57 @@ class FileSysIntList:
         self.int_length = int_length
         self.byte_order = byte_order
         self.signed = signed
-        self._last_i = -1
+
+    def __repr__(self):
+        return f'{type(self).__name__}()'
 
     def __len__(self):
         self.file.seek(0, os.SEEK_END)
         return self.file.tell() // self.int_length
 
-    def __getitem__(self, item):
-        if item >= len(self):
-            raise IndexError
-        self.file.seek(self.int_length * item)
+    def __getitem__(self, key):
+        key = self._validate_key(key)
+        self.file.seek(key * self.int_length)
+
         bytes_ = self.file.read(self.int_length)
         return int.from_bytes(bytes_, self.byte_order,
                               signed=self.signed)
 
     def __setitem__(self, key, value):
-        self.file.seek(self.int_length * key)
+        key = self._validate_key(key)
+        self.file.seek(key * self.int_length)
+
         bytes_ = value.to_bytes(self.int_length, self.byte_order,
                                 signed=self.signed)
         self.file.write(bytes_)
-        self._last_i = max(self._last_i, key)
 
     def __del__(self):
         self.file.close()
 
     def append(self, value):
-        self._last_i += 1
-        self[self._last_i] = value
+        self.file.truncate((len(self) + 1) * self.int_length)
+        self[len(self) - 1] = value
 
     def pop(self):
         if not len(self):
-            raise IndexError(f'pop from empty {type(self).__name__}')
-        value = self[self._last_i]
-        self.file.truncate(self._last_i * self.int_length)
-        self._last_i -= 1
+            raise IndexError(f'pop from empty {type(self).__name__!r}')
+
+        value = self[len(self) - 1]
+        self.file.truncate((len(self) - 1) * self.int_length)
         return value
 
     sort = quick_sort_inplace
+
+    def _validate_key(self, key):
+        if isinstance(key, slice):
+            raise TypeError(f'{type(self).__name__!r} '
+                            f'does not support slices')
+
+        if key < 0:
+            key += len(self)
+
+        if not 0 <= key < len(self):
+            raise IndexError(f'{type(self).__name__!r} '
+                             f'assignment index out of range')
+
+        return key
