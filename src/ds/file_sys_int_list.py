@@ -14,7 +14,7 @@ class FileSysIntList:
         byteorder=sys.byteorder,
         signed=True
     ):
-        self._file = file or TemporaryFile('rb+')
+        self._file = file or TemporaryFile()
         self.int_len = int_len
         self.byteorder = byteorder
         self.signed = signed
