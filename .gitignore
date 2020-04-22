@@ -108,6 +108,3 @@ venv.bak/
 
 # PyCharm
 .idea
-
-# Pipfile lock
-Pipfile.lock
